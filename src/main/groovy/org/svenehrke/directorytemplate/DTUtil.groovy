@@ -1,14 +1,14 @@
-package org.svenehrke.gradle.plugin
+package org.svenehrke.directorytemplate
 
 class DTUtil {
 
-	public static dotsToSlashes(String v) {
+	public static String dotsToSlashes(String v) {
 		v.replaceAll('\\.', '/')
 	}
 
 	public static askForBindings(Map aBinding) {
 		aBinding.each() { key, value ->
-			aBinding[key] = TemplatesPlugin.prompt(key, aBinding[key])
+			aBinding[key] = prompt(key, aBinding[key])
 		}
 	}
 

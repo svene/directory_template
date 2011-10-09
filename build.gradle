@@ -4,8 +4,13 @@
  */
 
 apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'maven'
+
+group='org.svenehrke'
+artifact='directorytemplate'
+version = 1.0
 
 idea {
 	project {
@@ -19,26 +24,30 @@ idea {
 
 repositories {
 	mavenCentral()
+	mavenRepo urls: "http://m2repo.spockframework.org/snapshots"
 }
 
 dependencies {
+	compile 'org.slf4j:slf4j-api:1.6.2'
+	compile 'ch.qos.logback:logback-core:0.9.30'
+
+	testCompile "org.spockframework:spock-core:0.5-groovy-1.7"
 	testCompile 'junit:junit:4.8.1'
+	groovy localGroovy()
 }
 
-group='org.svenehrke'
-artifact='directorytemplate'
 
 uploadArchives {
 	repositories.mavenDeployer {
-		repository(url: "${userDeploymentRepoBaseURL}/snapshots")
+		repository(url: "${userDeploymentRepoBaseURL}/releases")
 	}
 }
 
 // see http://evgeny-goldin.com/wiki/Gradle  (section 'Setting the repository URL at the time the DAG is ready')
 gradle.taskGraph.whenReady { tg ->
-	if (tg.hasTask(':makeRelease')) {
+	if (!tg.hasTask(':makeRelease')) {
 		version += '-SNAPSHOT'
-		uploadArchives.repositories['mavenDeployer'].repository.url = "${userDeploymentRepoBaseURL}/releases"
+		uploadArchives.repositories['mavenDeployer'].repository.url = "${userDeploymentRepoBaseURL}/snapshots"
 	}
 }
 
