@@ -23,8 +23,9 @@ class DirectoryTemplateResolver {
 		result
 	}
 
-	static void createFolderFromZipResource(/*String aRootFolderName, */ClassLoader aClassLoader, String aTemplateName, Map<String, String> aBinding) {
-		ZipInputStream zis = new ZipInputStream(aClassLoader.getResourceAsStream(aTemplateName))
+	static void createFolderFromZipResource(ClassLoader aClassLoader, String aZipName, Map<String, String> aBinding) {
+		println aZipName
+		ZipInputStream zis = new ZipInputStream(aClassLoader.getResourceAsStream(aZipName))
 		ZipEntry ze
 		while ((ze = zis.getNextEntry()) != null) {
 
@@ -58,13 +59,13 @@ class DirectoryTemplateResolver {
 							//println "excluded: $file.name"
 						}
 						else {
-//					println "massaging $file.path"
+					println "massaging $file.path"
 							try {
 								String st = file.text
 								aTextBinding.entrySet().each { entry ->
 									String k = entry.key
 									String v = entry.value
-//							println "*** $k=$v"
+							println "*** $k=$v"
 									String sOld = ''
 									while (sOld != st) {
 										sOld = st
