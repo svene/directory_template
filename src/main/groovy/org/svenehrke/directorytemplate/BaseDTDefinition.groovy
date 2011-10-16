@@ -1,25 +1,18 @@
 package org.svenehrke.directorytemplate
 
 abstract class BaseDTDefinition {
-	final String rootFolderName
 	Map<String, DTInputParameter> inputParameters
 
-	public BaseDTDefinition(String aRootFolderName) {
-		rootFolderName = aRootFolderName;
-	}
-
-	@Override
 	void createTargetFolder() {
-		// Create target folder:
-		new File(rootFolderName).mkdirs()
-
 		// Collect input parameters:
 		askForInputParameters()
+
 		// Iterate over zip-entries and create real folder layout with resolved variables from them:
-		DirectoryTemplateResolver.createFolderFromZipResource(rootFolderName, getClass().classLoader, templateName, filenameBinding)
+		DirectoryTemplateResolver.createFolderFromZipResource(getClass().classLoader, templateName, filenameBinding)
 
 		// Apply textBinding on extracted files:
-		DirectoryTemplateResolver.applyTextBindingToExpandedZip(rootFolderName, exclusions, textBinding)
+		def rootDir = DirectoryTemplateResolver.applyBindings('@ROOT_FOLDER@', filenameBinding)
+		DirectoryTemplateResolver.applyTextBindingToExpandedZip(rootDir, exclusions, textBinding)
 	}
 
 	void askForInputParameters() {

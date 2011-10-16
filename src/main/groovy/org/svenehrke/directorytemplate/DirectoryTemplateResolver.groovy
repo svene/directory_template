@@ -23,14 +23,16 @@ class DirectoryTemplateResolver {
 		result
 	}
 
-	static void createFolderFromZipResource(String aRootFolderName, ClassLoader aClassLoader, String aTemplateName, Map<String, String> aBinding) {
+	static void createFolderFromZipResource(/*String aRootFolderName, */ClassLoader aClassLoader, String aTemplateName, Map<String, String> aBinding) {
 		ZipInputStream zis = new ZipInputStream(aClassLoader.getResourceAsStream(aTemplateName))
 		ZipEntry ze
 		while ((ze = zis.getNextEntry()) != null) {
 
 			def newName = DirectoryTemplateResolver.applyBindings(ze.name, aBinding)
-			String fn = "${aRootFolderName}/$newName"
+//			String fn = "${aRootFolderName}/$newName"
+			String fn = "$newName"
 			if (ze.directory) {
+				println "folder: $ze.name, new: $fn"
 				new File(fn).mkdirs()
 			}
 			else {
@@ -48,9 +50,9 @@ class DirectoryTemplateResolver {
 		zis.close()
 	}
 
-	static void applyTextBindingToExpandedZip(String aRootFolderName, List<String> aExclusions, Map<String, String> aTextBinding) {
+	static void applyTextBindingToExpandedZip(String aRootDir, List<String> aExclusions, Map<String, String> aTextBinding) {
 		if (aTextBinding) {
-			new File("$aRootFolderName/DT").eachFileRecurse { file ->
+			new File(aRootDir).eachFileRecurse { file ->
 				if (!file.directory) {
 						if (aExclusions.any { x -> file.name.endsWith(x) }) {
 							//println "excluded: $file.name"
