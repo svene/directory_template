@@ -6,12 +6,23 @@ abstract class BaseDTDefinition {
 	void createTargetFolder() {
 		// Collect input parameters:
 		askForInputParameters()
+/*
+		println 'inputParameters:'
+		inputParameters.each {
+			println "$it.key=$it.value"
+		}
+
+		println 'getFilenameBinding:'
+		getFilenameBinding().each {
+			println "$it.key=$it.value"
+		}
+*/
 
 		// Iterate over zip-entries and create real folder layout with resolved variables from them:
-		DirectoryTemplateResolver.createFolderFromZipResource(getClass().classLoader, templateName, filenameBinding)
+		DirectoryTemplateResolver.createFolderFromZipResource(getClass().classLoader, getZipName(), filenameBinding)
 
 		// Apply textBinding on extracted files:
-		def rootDir = DirectoryTemplateResolver.applyBindings('@ROOT_FOLDER@', filenameBinding)
+		def rootDir = DirectoryTemplateResolver.applyBindings('@ROOT_FOLDER@', getFilenameBinding())
 		DirectoryTemplateResolver.applyTextBindingToExpandedZip(rootDir, exclusions, textBinding)
 	}
 
@@ -27,7 +38,7 @@ abstract class BaseDTDefinition {
 
 	}
 
-	abstract String getTemplateName()
+	abstract String getZipName()
 	abstract Map<String, String> getFilenameBinding()
 	abstract Map<String, String> getTextBinding()
 
