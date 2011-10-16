@@ -1,0 +1,15 @@
+WIP:
+====
+
+READY:
+======
+
+BACKLOG:
+========
+- store inputparameters/derived properties in '.meta/directorytemplate/...' so that proceeding directorytemplate calls
+  can reuse them. E.g. using smkdir simplejava (which takes a 'packagename') and then calling smkdir gradle should
+  reuse packagedir for the application plugin in the generated 'build.gradle'
+- smkdir call should not modify files from previous run
+
+DONE:
+=====
