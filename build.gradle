@@ -10,7 +10,7 @@ apply plugin: 'maven'
 
 group='org.svenehrke'
 artifact='directorytemplate'
-version = '0.0.2'
+version = '0.0.3'
 
 idea {
 	project {
