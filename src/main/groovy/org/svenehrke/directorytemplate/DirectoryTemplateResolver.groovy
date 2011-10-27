@@ -30,7 +30,6 @@ class DirectoryTemplateResolver {
 		while ((ze = zis.getNextEntry()) != null) {
 
 			def newName = DirectoryTemplateResolver.applyBindings(ze.name, aBinding)
-//			String fn = "${aRootFolderName}/$newName"
 			String fn = "$newName"
 			if (ze.directory) {
 				println "folder: $ze.name, new: $fn"
