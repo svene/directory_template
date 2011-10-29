@@ -7,6 +7,7 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'maven'
+apply from: 'https://raw.github.com/evgeny-goldin/gradle-plugins/master/src/main/groovy/CodeNarc.gradle'
 
 group='org.svenehrke'
 artifact='directorytemplate'
@@ -24,8 +25,8 @@ idea {
 
 repositories {
 	mavenCentral()
-	mavenRepo urls: "http://m2repo.spockframework.org/snapshots"
-}
+	mavenRepo urls: 'http://m2repo.spockframework.org/snapshots'
+	}
 
 dependencies {
 	compile 'org.slf4j:slf4j-api:1.6.2'
@@ -33,7 +34,7 @@ dependencies {
 
 	testCompile "org.spockframework:spock-core:0.5-groovy-1.7"
 	testCompile 'junit:junit:4.8.1'
-	groovy localGroovy()
+	groovy 'org.codehaus.groovy:groovy:1.8.3'
 }
 
 

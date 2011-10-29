@@ -4,7 +4,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
+import groovy.util.logging.Log
 
+@Log
 class DirectoryTemplateResolver {
 
 	static final Logger logger = LoggerFactory.getLogger(DirectoryTemplateResolver.class)
@@ -23,14 +25,14 @@ class DirectoryTemplateResolver {
 		result
 	}
 
-	static void createFolderFromZipResource(ClassLoader aClassLoader, String aZipName, Map<String, String> aBinding) {
-		println aZipName
+	static void createFolderFromZipResource(ClassLoader aClassLoader, String aZipName, Map<String, String> aBinding, String aTmpRootDirName) {
+		log.info "aZipName: $aZipName"
 		ZipInputStream zis = new ZipInputStream(aClassLoader.getResourceAsStream(aZipName))
 		ZipEntry ze
 		while ((ze = zis.getNextEntry()) != null) {
 
 			def newName = DirectoryTemplateResolver.applyBindings(ze.name, aBinding)
-			String fn = "$newName"
+			String fn = "$aTmpRootDirName/$newName"
 			if (ze.directory) {
 				println "folder: $ze.name, new: $fn"
 				new File(fn).mkdirs()

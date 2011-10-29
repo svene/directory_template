@@ -2,23 +2,27 @@ package org.svenehrke.directorytemplate
 
 class DTUtil {
 
-	public static String dotsToSlashes(String v) {
+	static String dotsToSlashes(String v) {
 		v.replaceAll('\\.', '/')
 	}
 
-	public static askForBindings(Map aBinding) {
+	static askForBindings(Map aBinding) {
 		aBinding.each() { key, value ->
 			aBinding[key] = prompt(key, aBinding[key])
 		}
 	}
 
-	public static askForInputParameters(List<DTInputParameter> aInputParameters) {
+	static askForInputParameter(DTInputParameter aInputParameter) {
+		aInputParameter.value = prompt(aInputParameter.prompt, aInputParameter.value)
+	}
+	static askForInputParameters(List<DTInputParameter> aInputParameters) {
 		aInputParameters.each() { ip ->
-			ip.value = prompt(ip.prompt, ip.value)
+			askForInputParameter ip
+//			ip.value = prompt(ip.prompt, ip.value)
 		}
 	}
 
-	public static Map inputParametersAsMap(List<DTInputParameter> aInputParameters) {
+	static Map inputParametersAsMap(List<DTInputParameter> aInputParameters) {
 		def result = [:]
 		aInputParameters.each() { ip ->
 			result[ip.key] = ip.value
@@ -28,12 +32,12 @@ class DTUtil {
 	// original routine from gradle-template plugin:
 	static String prompt(String message, String defaultValue = null) {
 	   if (defaultValue) {
-		  return System.console().readLine("${inputPrompt} ${message} [${defaultValue}] ") ?: defaultValue
+		  return System.console().readLine("${INPUT_PROMPT} ${message} [${defaultValue}] ") ?: defaultValue
 	   }
-	   return System.console().readLine("${inputPrompt} ${message} ") ?: defaultValue
+	   System.console().readLine("${INPUT_PROMPT} ${message} ") ?: defaultValue
 	}
 
-	static final String lineSep = System.getProperty("line.separator")
-	static final String inputPrompt = "${lineSep}??>"
+	static final String LINE_SEPARATOR = System.getProperty('line.separator')
+	static final String INPUT_PROMPT = "${LINE_SEPARATOR}??>"
 
 }
