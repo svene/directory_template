@@ -25,20 +25,21 @@ class DirectoryTemplateResolver {
 		result
 	}
 
-	static void createFolderFromZipResource(ClassLoader aClassLoader, String aZipName, Map<String, String> aBinding, String aTmpRootDirName) {
+	static void createFolderFromZipResource(ClassLoader aClassLoader, String aZipName, String aTargetFolderName, Map<String, String> aBinding) {
 		log.info "aZipName: $aZipName"
 		ZipInputStream zis = new ZipInputStream(aClassLoader.getResourceAsStream(aZipName))
 		ZipEntry ze
 		while ((ze = zis.getNextEntry()) != null) {
 
 			def newName = DirectoryTemplateResolver.applyBindings(ze.name, aBinding)
-			String fn = "$aTmpRootDirName/$newName"
+			String fn = "$aTargetFolderName/$newName"
 			if (ze.directory) {
-				println "folder: $ze.name, new: $fn"
+				log.info "folder: $ze.name, new: $fn"
 				new File(fn).mkdirs()
 			}
 			else {
 				// see http://snipplr.com/view/1745/extract-zipentry-into-a-bytearrayoutputstream/
+				log.info "unzipping file $fn"
 				OutputStream output = new File(fn).newDataOutputStream()
 				int data = 0;
 				while( ( data = zis.read() ) != - 1 )

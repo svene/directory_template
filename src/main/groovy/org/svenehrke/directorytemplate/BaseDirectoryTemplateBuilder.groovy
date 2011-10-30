@@ -5,7 +5,21 @@ import groovy.util.logging.Log
 @Log
 abstract class BaseDirectoryTemplateBuilder {
 	Map<String, DTInputParameter> inputParameters
-//	String rootDir
+
+	abstract String templateName()
+	
+	private zipName() {
+		"dt_${templateName()}.zip"
+	}
+	private templateFolderName() {
+		"${metaInfoFolderName()}/${templateName()}"
+	}
+	private static String metaInfoFolderName() {
+		'.directory_template'
+	}
+	private static String metaInfoFilename() {
+		"${metaInfoFolderName()}/inputParameters.properties"
+	}
 
 	void createTargetFolder() {
 		createMetaInfoFile()
@@ -13,32 +27,24 @@ abstract class BaseDirectoryTemplateBuilder {
 		// Collect input parameters:
 		inputParameters = askForInputParameters([:])
 		Map<String, String> filenameBinding = newFilenameBinding(inputParameters)
-		String tmpRootDirName = 'sj'
-		filenameBinding.put('@ROOT_FOLDER@', tmpRootDirName)
 
 		// Iterate over zip-entries and create real folder layout with resolved variables from them:
-		String rd = ".meta/directory_template"
-		new File(rd).mkdirs()
-		DirectoryTemplateResolver.createFolderFromZipResource(getClass().classLoader, getZipName(), filenameBinding, rd)
+		new File(metaInfoFolderName()).mkdirs()
+		DirectoryTemplateResolver.createFolderFromZipResource(getClass().classLoader, zipName(), metaInfoFolderName(), filenameBinding)
 
 		// Apply textBinding on extracted files:
-		DirectoryTemplateResolver.applyTextBindingToExpandedZip(rd, exclusions, newTextBinding(inputParameters))
-		new File("$rd/sj").eachFile { File f ->
+		DirectoryTemplateResolver.applyTextBindingToExpandedZip(templateFolderName(), exclusions, newTextBinding(inputParameters))
+		new File(templateFolderName()).eachFile { File f ->
 			f.renameTo("./$f.name")
 		}
 	}
 
 	private void createMetaInfoFile() {
-		String dtCfgDir = ".meta/directory_template"
-		new File(dtCfgDir).mkdirs()
-		File f = new File("$dtCfgDir/inputParameters.properties")
+		new File(metaInfoFolderName()).mkdirs()
+		File f = new File("${metaInfoFilename()}")
 		if (!f.exists()) {
 			f.createNewFile()
 		}
-	}
-	
-	private static String getMetaInfoFilename() {
-		".meta/directory_template/inputParameters.properties"
 	}
 	
 	private Map<String, DTInputParameter> askForInputParameters(Map<String, DTInputParameter> aInputParameters) {
@@ -65,7 +71,7 @@ abstract class BaseDirectoryTemplateBuilder {
 	}
 
 	private static storeMetaInfoFile(Properties props) {
-		File propFile = new File(getMetaInfoFilename())
+		File propFile = new File(metaInfoFilename())
 		log.info 'Store properties to file'
 		propFile.withWriter {
 			props.store(it, '')
@@ -89,7 +95,7 @@ abstract class BaseDirectoryTemplateBuilder {
 	}
 
 	private static Properties newPropertiesFromFile() {
-		File propFile = new File(getMetaInfoFilename())
+		File propFile = new File(metaInfoFilename())
 		Properties props = new Properties()
 		propFile.withReader {
 			props.load(it)
@@ -104,7 +110,6 @@ abstract class BaseDirectoryTemplateBuilder {
 		[:]
 	}
 
-	abstract String getZipName()
 	abstract Map<String, String> newFilenameBinding(Map<String, DTInputParameter> aInputParameters)
 	abstract Map<String, String> newTextBinding(Map<String, DTInputParameter> aInputParameters)
 
