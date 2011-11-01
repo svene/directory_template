@@ -11,7 +11,7 @@ apply from: 'https://raw.github.com/evgeny-goldin/gradle-plugins/master/src/main
 
 group='org.svenehrke'
 artifact='directorytemplate'
-version = '0.0.3'
+version = '0.0.4'
 
 idea {
 	project {
