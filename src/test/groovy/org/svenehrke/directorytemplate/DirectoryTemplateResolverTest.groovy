@@ -5,8 +5,8 @@ import spock.lang.Unroll
 
 public class DirectoryTemplateResolverTest extends Specification {
 
-	@Unroll({"applyBindings(#s,#b) -> #x"})
-	def testApplyBindings() {
+	@Unroll
+	def "testApplyBindings(#s,#b) -> #x"() {
 		expect:
 			x == DirectoryTemplateResolver.applyBindings(s, b)
 
@@ -17,8 +17,8 @@ public class DirectoryTemplateResolverTest extends Specification {
 			'hello @one/@two'  | ['@one':'eins', '@two':'zwei']   | 'hello eins/zwei'
 	}
 
-	@Unroll({"replaceAll(#s) -> #x"})
-	def testRegEx() {
+	@Unroll
+	def "testReplaceAll(#s) -> #x"() {
 		expect:
 			x == s.replaceAll('\\.', '/')
 
