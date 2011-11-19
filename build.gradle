@@ -25,16 +25,16 @@ idea {
 
 repositories {
 	mavenCentral()
-	mavenRepo urls: 'http://m2repo.spockframework.org/snapshots'
+	mavenRepo (url: 'http://m2repo.spockframework.org/snapshots')
 	}
 
 dependencies {
 	compile 'org.slf4j:slf4j-api:1.6.2'
 	compile 'ch.qos.logback:logback-core:0.9.30'
 
-	testCompile "org.spockframework:spock-core:0.5-groovy-1.7"
+	testCompile "org.spockframework:spock-core:0.6-groovy-1.8-SNAPSHOT"
 	testCompile 'junit:junit:4.8.1'
-	groovy 'org.codehaus.groovy:groovy:1.8.3'
+	groovy 'org.codehaus.groovy:groovy:1.8.4'
 }
 
 
