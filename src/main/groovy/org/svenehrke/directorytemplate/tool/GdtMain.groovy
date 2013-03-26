@@ -4,6 +4,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.CloneCommand
+import org.svenehrke.directorytemplate.DirectoryTemplateResolver
 
 class GdtMain {
 	String userHome = System.properties['user.home']
@@ -67,6 +68,7 @@ class GdtMain {
 			}
 			// todo: dynamically read in installed directory templates. Until then hard coded here:
 			String dtName = args[1]
+			DirectoryTemplateResolver.createFolderFromTemplateFolder()
 		}
 		else {
 			println "unknown command '${command}'"

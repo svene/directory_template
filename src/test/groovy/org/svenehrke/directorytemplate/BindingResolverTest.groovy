@@ -3,12 +3,12 @@ package org.svenehrke.directorytemplate;
 import spock.lang.Specification
 import spock.lang.Unroll
 
-public class DirectoryTemplateResolverTest extends Specification {
+public class BindingResolverTest extends Specification {
 
 	@Unroll
 	def "testApplyBindings(#s,#b) -> #x"() {
 		expect:
-			x == DirectoryTemplateResolver.applyBindings(s, b)
+			x == new BindingResolver(b).apply(s)
 
 		where:
 			s                  | b                                | x
