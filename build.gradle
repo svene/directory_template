@@ -7,11 +7,10 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'maven'
-apply from: 'https://raw.github.com/evgeny-goldin/gradle-plugins/master/src/main/groovy/CodeNarc.gradle'
 
-group='org.svenehrke'
-artifact='directorytemplate'
-version = '0.0.4'
+group = 'org.svenehrke'
+archivesBaseName = 'directorytemplate'
+version = '0.0.5'
 
 idea {
 	project {
@@ -31,10 +30,11 @@ repositories {
 dependencies {
 	compile 'org.slf4j:slf4j-api:1.6.2'
 	compile 'ch.qos.logback:logback-core:0.9.30'
+	compile 'commons-io:commons-io:2.4'
 
-	testCompile "org.spockframework:spock-core:0.6-groovy-1.8-SNAPSHOT"
-	testCompile 'junit:junit:4.8.1'
-	groovy 'org.codehaus.groovy:groovy:1.8.4'
+	testCompile "org.spockframework:spock-core:0.7-groovy-1.8"
+	testCompile 'junit:junit:4.10'
+	groovy 'org.codehaus.groovy:groovy-all:1.8.9'
 }
 
 
@@ -57,6 +57,6 @@ task makeSnapshot(dependsOn: 'uploadArchives')
 task makeRelease(dependsOn: 'uploadArchives')
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '1.0-milestone-5'
+	gradleVersion = '1.4'
 }
 
