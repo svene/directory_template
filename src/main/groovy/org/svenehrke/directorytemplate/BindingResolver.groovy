@@ -10,6 +10,9 @@ class BindingResolver {
 		this.binding = inBinding
 	}
 
+	/** inValue with substrings appearing in binding's keys got replaced with their associated values.
+	 * See Test for examples
+	 */
 	String apply(String inValue) {
 		String result = inValue
 		binding?.each {key, value ->

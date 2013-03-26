@@ -1,10 +1,11 @@
 package org.svenehrke.directorytemplate.tool
 
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder
-import org.eclipse.jgit.lib.Repository
-import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.CloneCommand
-import org.svenehrke.directorytemplate.DirectoryTemplateResolver
+import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.lib.Repository
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder
+import org.svenehrke.directorytemplate.DTUtil
+import org.svenehrke.directorytemplate.TemplateFolderToFolderCreator
 
 class GdtMain {
 	String userHome = System.properties['user.home']
@@ -68,7 +69,10 @@ class GdtMain {
 			}
 			// todo: dynamically read in installed directory templates. Until then hard coded here:
 			String dtName = args[1]
-			DirectoryTemplateResolver.createFolderFromTemplateFolder()
+			def fileNameBinding = ['@packagename@': DTUtil.dotsToSlashes('org.svenehrke')]
+			def textBinding = ['packagename': 'org.svenehrke']
+
+			new TemplateFolderToFolderCreator().createFolderFromTemplateFolder(fileNameBinding, textBinding)
 		}
 		else {
 			println "unknown command '${command}'"

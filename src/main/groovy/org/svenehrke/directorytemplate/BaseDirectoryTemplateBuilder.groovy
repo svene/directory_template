@@ -1,5 +1,4 @@
 package org.svenehrke.directorytemplate
-
 import groovy.util.logging.Log
 
 @Log
@@ -11,50 +10,26 @@ abstract class BaseDirectoryTemplateBuilder {
 
 	abstract String templateName()
 	
-	private zipName() {
-		"dt_${templateName()}.zip"
+	def zipName(String inTemplateName) {
+		"dt_${inTemplateName()}.zip"
 	}
 	String templateFolderName() {
 		"${metaInfoFolderName()}/${templateName()}"
 	}
-	private static String metaInfoFolderName() {
+	static String metaInfoFolderName() {
 		'.directory_template'
 	}
-	private static String inputParametersFilename() {
+	static String inputParametersFilename() {
 		"${metaInfoFolderName()}/inputParameters.properties"
 	}
 
-	/** Create target folder from template folder (template method) */
-	void createTargetFolder(Map<String, String> inFilenameBinding, Map<String, String> inTextBinding, String inTemplateFolderName) {
 
-		createMetaInfoFolder(metaInfoFolderName())
-
-		// Iterate over zip-entries and create real folder layout with resolved variables from them:
-		DirectoryTemplateResolver.createFolderFromZipResource(getClass().classLoader, zipName(), metaInfoFolderName(), inFilenameBinding)
-
-		// Apply textBinding on extracted files:
-		DirectoryTemplateResolver.applyTextBindingToExpandedZip(inTemplateFolderName, exclusions, inTextBinding)
-
-		// Move folders from temporary directory to current folder:
-		new File(inTemplateFolderName).eachFile { File f ->
-			f.renameTo("./$f.name")
-		}
-	}
-
-	private void createMetaInfoFolder() {
-		new File(metaInfoFolderName()).mkdirs()
-		File f = new File("${inputParametersFilename()}")
-		if (!f.exists()) {
-			f.createNewFile()
-		}
-	}
-	
-	Map<String, DTInputParameter> askForInputParameters(Map<String, DTInputParameter> aInputParameters) {
+	Map<String, DTInputParameter> askForInputParameters(Map<String, DTInputParameter> aInputParameters, String inInputParametersFilename) {
 		// Get all defined input parameters for this template:
 		Map<String, DTInputParameter> result = newInputParameters()
 
 		// Load properties from previous runs:
-		Properties props = newPropertiesFromFile()
+		Properties props = newPropertiesFromFile(inInputParametersFilename)
 
 		// Apply property values from previous runs to values of defined input parameters:
 		applyPropertiesToInputParameters(result, props)
@@ -65,15 +40,15 @@ abstract class BaseDirectoryTemplateBuilder {
 
 		// Store possibly modified parameters back as property file:
 		applyParametersToProperties(result, props)
-		storeMetaInfoFile(props)
+		storeMetaInfoFile(props, inInputParametersFilename)
 		
 
 		result.putAll(newDerivedInputParameters(result))
 		result
 	}
 
-	private static storeMetaInfoFile(Properties props) {
-		File propFile = new File(inputParametersFilename())
+	private static storeMetaInfoFile(Properties props, String inInputParametersFilename) {
+		File propFile = new File(inInputParametersFilename)
 		log.info 'Store properties to file'
 		propFile.withWriter {
 			props.store(it, '')
@@ -96,8 +71,8 @@ abstract class BaseDirectoryTemplateBuilder {
 		}
 	}
 
-	private static Properties newPropertiesFromFile() {
-		File propFile = new File(inputParametersFilename())
+	private static Properties newPropertiesFromFile(String inInputParametersFilename) {
+		File propFile = new File(inInputParametersFilename)
 		Properties props = new Properties()
 		propFile.withReader {
 			props.load(it)

@@ -5,12 +5,13 @@ public class ApplyTest extends Specification {
 
 	def "testApply"() {
 		when:
-			DirectoryTemplateResolver.createFolderFromTemplateFolder()
+			def fileNameBinding = ['@packagename@': DTUtil.dotsToSlashes('org.svenehrke')]
+			def textBinding = ['packagename': 'org.svenehrke']
+
+			new TemplateFolderToFolderCreator().createFolderFromTemplateFolder(fileNameBinding, textBinding)
 			def s = 'a'
 		then:
 			s == 'a'
-//		println "hallo"
-//		DirectoryTemplateResolver.createFolderFromTemplateFolder()
 	}
 
 }
