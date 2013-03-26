@@ -4,7 +4,6 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.CloneCommand
-import org.eclipse.jgit.api.ReflogCommand
 
 class GdtMain {
 	String userHome = System.properties['user.home']
@@ -89,12 +88,3 @@ class GdtMain {
 	"""
 	}
 }
-
-//----------------------------------------------------
-/*
-git.checkout().setName('eb36bddf2fff3d74d2bafdc510481422408beff2').call()
-
-ReflogCommand rlc = new ReflogCommand()
-rlc.setRef('d1c7c7877430ee122bbc14241f920c1fea34b27e')
-rlc.call()
-*/
