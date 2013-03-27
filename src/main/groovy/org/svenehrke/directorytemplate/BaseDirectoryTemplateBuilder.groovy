@@ -10,68 +10,29 @@ abstract class BaseDirectoryTemplateBuilder {
 
 	abstract String templateName()
 	
-	static String metaInfoFolderName() {
-		'.directory_template'
-	}
-	static String inputParametersFilename() {
-		"${metaInfoFolderName()}/inputParameters.properties"
-	}
 
-
-	Map<String, DTInputParameter> askForInputParameters(Map<String, DTInputParameter> aInputParameters, String inInputParametersFilename) {
+	Map<String, DTInputParameter> askForInputParameters(Map<String, DTInputParameter> aInputParameters, DTMetaInformation inMetaInformation) {
 		// Get all defined input parameters for this template:
 		Map<String, DTInputParameter> result = newInputParameters()
 
+		def metaFolder = new DTMetaFolder(metaInformation: inMetaInformation)
+
 		// Load properties from previous runs:
-		Properties props = newPropertiesFromFile(inInputParametersFilename)
+		Properties props = metaFolder.newPropertiesFromFile()
 
 		// Apply property values from previous runs to values of defined input parameters:
-		applyPropertiesToInputParameters(result, props)
+		new DTInputParameters().applyPropertiesToInputParameters(result, props)
 
 		// Now ask user for each input value:
 		DTUtil.askForInputParameters(result*.value)
 		result << aInputParameters
 
 		// Store possibly modified parameters back as property file:
-		applyParametersToProperties(result, props)
-		storeMetaInfoFile(props, inInputParametersFilename)
-		
+		new DTInputParameters().applyParametersToProperties(result, props)
+		metaFolder.storeProperties(props)
 
 		result.putAll(newDerivedInputParameters(result))
 		result
-	}
-
-	private static storeMetaInfoFile(Properties props, String inInputParametersFilename) {
-		File propFile = new File(inInputParametersFilename)
-		log.info 'Store properties to file'
-		propFile.withWriter {
-			props.store(it, '')
-		}
-	}
-
-	private static applyParametersToProperties(Map<String, DTInputParameter> parameters, Properties props) {
-		parameters.each {ip ->
-			log.info "-->setting property $ip.key to $ip.value.value"
-			props.setProperty(ip.key, ip.value.value)
-		}
-	}
-
-	private static applyPropertiesToInputParameters(Map<String, DTInputParameter> parameters, Properties props) {
-		parameters.each {ip ->
-			String v = props.get(ip.key)
-			if (v) {
-				ip.value.value = v // Put property value on value of DTInputParameter
-			}
-		}
-	}
-
-	private static Properties newPropertiesFromFile(String inInputParametersFilename) {
-		File propFile = new File(inInputParametersFilename)
-		Properties props = new Properties()
-		propFile.withReader {
-			props.load(it)
-		}
-		props
 	}
 
 	Map<String, DTInputParameter> newInputParameters() {
