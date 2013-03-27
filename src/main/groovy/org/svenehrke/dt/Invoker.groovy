@@ -1,6 +1,6 @@
 package org.svenehrke.dt
-
 import org.svenehrke.directorytemplate.BaseDirectoryTemplateBuilder
+import org.svenehrke.directorytemplate.DTConstants
 import org.svenehrke.directorytemplate.ZippedTemplateToFolderCreator
 import org.svenehrke.dt.java.DirectoryTemplateDTBuilder
 import org.svenehrke.dt.java.GradleDTBuilder
@@ -30,12 +30,14 @@ class Invoker {
 		def inputParameters = builder.askForInputParameters([:], BaseDirectoryTemplateBuilder.inputParametersFilename())
 
 		// Create folder from template:
-		new ZippedTemplateToFolderCreator().createTargetFolder(
+		new ZippedTemplateToFolderCreator(
+			templateName: builder.templateName()
+			,metaInfoFolderName: DTConstants.META_INFO_FOLDERNAME
+		).createTargetFolder(
 			builder.newFilenameBinding(inputParameters),
 			builder.newTextBinding(inputParameters),
-			builder.templateFolderName(),
-			BaseDirectoryTemplateBuilder.inputParametersFilename(),
-			BaseDirectoryTemplateBuilder.metaInfoFolderName(),
+			"${DTConstants.META_INFO_FOLDERNAME}/${builder.templateName()}"
+			,
 			builder.zipName(builder.templateName()),
 			builder.getExclusions()
 		)

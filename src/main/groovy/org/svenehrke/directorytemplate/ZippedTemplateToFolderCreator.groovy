@@ -7,16 +7,19 @@ import java.util.zip.ZipInputStream
  */
 class ZippedTemplateToFolderCreator {
 
+	String metaInfoFolderName
+	String templateName
+
 	/** Create target folder from template folder (template method) */
 	void createTargetFolder(Map<String, String> inFilenameBinding, Map<String, String> inTextBinding,
-		String inTemplateFolderName, String inInputParametersFilename, String inMetaInfoFolderName,
-		String inZipFilename, List<String> inExclusions) {
+		String inTemplateFolderName, String inZipFilename, List<String> inExclusions) {
 
-		createMetaInfoFolder(inInputParametersFilename, inMetaInfoFolderName)
+		def mi = new DTMetaInformation(metaInfoFolderName: metaInfoFolderName, templateName: templateName)
+		new DTMetaFolder().createMetaInfoFolder(mi)
 
 		// Iterate over zip-entries and create real folder layout with resolved variables from them:
 		def zipInputStream = new ZipInputStream(getClass().classLoader.getResourceAsStream(inZipFilename))
-		new TemplateUnpacker(inMetaInfoFolderName, inFilenameBinding).createFolderFromZipInputStream(zipInputStream)
+		new TemplateUnpacker(mi.templateFolderInMetaFolder(), inFilenameBinding).createFolderFromZipInputStream(zipInputStream)
 
 		// Apply textBinding on extracted files:
 		DirectoryTemplateResolver.applyTextBindingToExpandedZip(inTemplateFolderName, inExclusions, inTextBinding)
@@ -27,11 +30,4 @@ class ZippedTemplateToFolderCreator {
 		}
 	}
 
-	private static void createMetaInfoFolder(String inInputParametersFilename, String inMetaInfoFolderName) {
-		new File(inMetaInfoFolderName).mkdirs()
-		File f = new File("${inInputParametersFilename}")
-		if (!f.exists()) {
-			f.createNewFile()
-		}
-	}
 }
