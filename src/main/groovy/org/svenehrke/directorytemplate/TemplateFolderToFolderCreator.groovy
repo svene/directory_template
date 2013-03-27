@@ -7,8 +7,9 @@ import java.util.zip.ZipInputStream
  */
 class TemplateFolderToFolderCreator {
 
+	String gdtHome
 	String targetDir
-	String templateSourceDirectoryName
+	String componentName
 	String templateName
 
 	void createTargetFolder(Map<String, String> inFilenameBinding, final Map<String, String> inTextBinding) {
@@ -20,6 +21,7 @@ class TemplateFolderToFolderCreator {
 		String zipFileName = "${mi.metaInfoFolderName}/${templateName}.zip"
 
 		// zip template directory (just to be able to reuse 'TemplateUnpacker''s filename binding capabilities):
+		String templateSourceDirectoryName = "$gdtHome/$componentName/templatedirectory/$templateName"
 		new AntBuilder().zip(basedir: "$templateSourceDirectoryName/..", destfile: zipFileName, includes: "${templateName}/**")
 		def zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFileName)))
 

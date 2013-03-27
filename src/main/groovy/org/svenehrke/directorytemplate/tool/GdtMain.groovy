@@ -74,9 +74,10 @@ class GdtMain {
 			def textBinding = ['packagename': 'org.svenehrke']
 
 			new TemplateFolderToFolderCreator(
-				targetDir: '.'
-				, templateSourceDirectoryName: templateSourceDirectory.absolutePath
-				, templateName: templateName
+				gdtHome: gdtHome,
+				targetDir: '.',
+				componentName: templateSourceDirectory.parentFile.parentFile.getName(),
+				templateName: templateName,
 			).createTargetFolder(fileNameBinding, textBinding)
 		}
 		else {
