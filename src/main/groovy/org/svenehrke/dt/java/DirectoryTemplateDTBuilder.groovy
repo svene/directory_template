@@ -6,11 +6,6 @@ import org.svenehrke.directorytemplate.DTUtil
 class DirectoryTemplateDTBuilder extends StandardDTBuilder {
 
 	@Override
-	String templateName() {
-		'directorytemplate'
-	}
-
-	@Override
 	Map<String, DTInputParameter> newInputParameters() {
 		Map<String, DTInputParameter> result = super.newInputParameters()
 		result['group'] = new DTInputParameter(value: 'org.mygroup', prompt: 'Maven Group: ')

@@ -21,9 +21,4 @@ class GradleDTBuilder extends StandardDTBuilder {
 		result
 	}
 
-	@Override
-	String templateName() {
-		'gradle'
-	}
-
 }

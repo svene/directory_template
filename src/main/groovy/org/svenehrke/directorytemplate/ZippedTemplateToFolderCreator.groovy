@@ -15,7 +15,7 @@ class ZippedTemplateToFolderCreator {
 		new DTMetaFolder(metaInformation: metaInformation).createMetaInfoFolder(metaInformation)
 
 		// Iterate over zip-entries and create real folder layout with resolved variables from them:
-		def zipInputStream = new ZipInputStream(getClass().classLoader.getResourceAsStream("dt_${templateName}.zip"))
+		def zipInputStream = new ZipInputStream(getClass().classLoader.getResourceAsStream("dt_${metaInformation.templateName}.zip"))
 		new TemplateUnpacker(metaInformation.templateFolderInMetaFolder(), inFilenameBinding).createFolderFromZipInputStream(zipInputStream)
 
 		// Apply textBinding on extracted files:

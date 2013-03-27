@@ -11,9 +11,4 @@ class SimpleSwingDTBuilder extends StandardJavaDTBuilder {
 		result
 	}
 
-	@Override
-	String templateName() {
-		'simpleswing'
-	}
-
 }

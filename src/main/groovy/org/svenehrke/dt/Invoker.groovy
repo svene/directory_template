@@ -20,15 +20,15 @@ class Invoker {
 		if (!args) {
 			printUsage(templates)
 		}
-		String key = args[0]
-		if (!templates.keySet().contains(key)) {
+		String templateName = args[0]
+		if (!templates.keySet().contains(templateName)) {
 			printUsage(templates)
 		}
 
-		BaseDirectoryTemplateBuilder builder = templates[key]
+		BaseDirectoryTemplateBuilder builder = templates[templateName]
 
 		// Collect input parameters:
-		def mi = new DTMetaInformation(metaInfoFolderName: DTConstants.META_INFO_FOLDERNAME, templateName: builder.templateName())
+		def mi = new DTMetaInformation(metaInfoFolderName: DTConstants.META_INFO_FOLDERNAME, templateName: templateName)
 		def inputParameters = builder.askForInputParameters([:], mi)
 
 		// Create folder from template:

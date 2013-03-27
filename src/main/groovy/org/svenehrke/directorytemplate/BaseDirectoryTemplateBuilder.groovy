@@ -8,9 +8,6 @@ import groovy.util.logging.Log
 abstract class BaseDirectoryTemplateBuilder {
 	Map<String, DTInputParameter> inputParameters
 
-	abstract String templateName()
-	
-
 	Map<String, DTInputParameter> askForInputParameters(Map<String, DTInputParameter> aInputParameters, DTMetaInformation inMetaInformation) {
 		// Get all defined input parameters for this template:
 		Map<String, DTInputParameter> result = newInputParameters()
