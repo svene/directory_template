@@ -1,5 +1,4 @@
 package org.svenehrke.directorytemplate.tool
-
 import org.eclipse.jgit.api.CloneCommand
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
@@ -66,20 +65,19 @@ class GdtMain {
 			}
 			// todo: dynamically read in installed directory templates. Until then hard coded here:
 			String templateName = args[1]
-			File templateDirectory = availableTemplates()[templateName]
-			if (!templateDirectory.exists()) {
-				println("template folder '${templateDirectory.absolutePath}' not found.")
+			File templateSourceDirectory = availableTemplates()[templateName]
+			if (!templateSourceDirectory.exists()) {
+				println("template folder '${templateSourceDirectory.absolutePath}' not found.")
 				System.exit(1)
 			}
 			def fileNameBinding = ['@packagename@': DTUtil.dotsToSlashes('org.svenehrke')]
 			def textBinding = ['packagename': 'org.svenehrke']
 
 			new TemplateFolderToFolderCreator(
-				workingDir: '.'
-				,templateDirectoryName: templateDirectory.absolutePath
-				,templateName: templateName
-				,unpackFolderName: "./ttt"
-			).createFolderFromTemplateFolder(fileNameBinding, textBinding)
+				targetDir: '.'
+				, templateSourceDirectoryName: templateSourceDirectory.absolutePath
+				, templateName: templateName
+			).createTargetFolder(fileNameBinding, textBinding)
 		}
 		else {
 			println "unknown command '${command}'"

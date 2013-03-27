@@ -9,11 +9,10 @@ public class ApplyTest extends Specification {
 			def textBinding = ['packagename': 'org.svenehrke']
 
 		new TemplateFolderToFolderCreator(
-			workingDir: '/home/sven/tmp/gdt'
-			,templateDirectoryName: '/home/sven/.gdt/dt_java/templatedirectory'
+			targetDir: '/home/sven/tmp/gdt'
+			, templateSourceDirectoryName: '/home/sven/.gdt/dt_java/templatedirectory'
 			,templateName: 'simplejava'
-			,unpackFolderName: "./ttt"
-		).createFolderFromTemplateFolder(fileNameBinding, textBinding)
+		).createTargetFolder(fileNameBinding, textBinding)
 			def s = 'a'
 		then:
 			s == 'a'

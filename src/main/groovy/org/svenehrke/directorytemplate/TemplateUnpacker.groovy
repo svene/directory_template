@@ -7,13 +7,15 @@ import java.util.zip.ZipInputStream
 
 @Log
 class TemplateUnpacker {
-	private final String targetFolderName
-	private final Map<String, String> filenameBinding
+	String targetFolderName
+	Map<String, String> filenameBinding
 
+/*
 	TemplateUnpacker(String aTargetFolderName, Map<String, String> aFilenameBinding) {
 		targetFolderName = aTargetFolderName
 		filenameBinding = aFilenameBinding
 	}
+*/
 
 	void createFolderFromZipInputStream(ZipInputStream inZipInputStream) {
 

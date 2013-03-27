@@ -7,28 +7,35 @@ import java.util.zip.ZipInputStream
  */
 class TemplateFolderToFolderCreator {
 
-	String workingDir
-	String templateDirectoryName
+	String targetDir
+	String templateSourceDirectoryName
 	String templateName
-	String unpackFolderName
 
-	void createFolderFromTemplateFolder(Map<String, String> inFilenameBinding, final Map<String, String> inTextBinding) {
-		String zipFileName = "${workingDir}/${templateName}.zip"
+	void createTargetFolder(Map<String, String> inFilenameBinding, final Map<String, String> inTextBinding) {
+
+		DTMetaInformation mi = new DTMetaInformation(metaInfoFolderName: "$targetDir/${DTConstants.META_INFO_FOLDERNAME}", templateName: templateName)
+		new DTMetaFolder(metaInformation: mi).createMetaInfoFolder()
+
+
+		String zipFileName = "${mi.metaInfoFolderName}/${templateName}.zip"
 
 		// zip template directory (just to be able to reuse 'TemplateUnpacker''s filename binding capabilities):
-		new AntBuilder().zip(basedir: "$templateDirectoryName/..", destfile: zipFileName, includes: "${templateName}/**")
+		new AntBuilder().zip(basedir: "$templateSourceDirectoryName/..", destfile: zipFileName, includes: "${templateName}/**")
 		def zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFileName)))
 
 		// unzip again with bindings applied:
-		new TemplateUnpacker(unpackFolderName, inFilenameBinding).createFolderFromZipInputStream(zipInputStream)
+		new TemplateUnpacker(targetFolderName: mi.metaInfoFolderName, filenameBinding: inFilenameBinding).createFolderFromZipInputStream(zipInputStream)
 
 		// Apply textBinding on extracted files:
-		DirectoryTemplateResolver.applyTextBindingToExpandedZip(unpackFolderName, [], inTextBinding)
+		DirectoryTemplateResolver.applyTextBindingToExpandedZip(mi.templateFolderInMetaFolder(), [], inTextBinding)
 
 		// Move folders from temporary directory to current folder:
-		new File("${unpackFolderName}/${templateName}").eachFile { File f ->
-			f.renameTo("${workingDir}/$f.name")
+		new File(mi.templateFolderInMetaFolder()).eachFile { File f ->
+			f.renameTo("${targetDir}/$f.name")
 		}
-		new File(unpackFolderName).deleteDir()
+
+		// cleanup:
+		new File(mi.templateFolderInMetaFolder()).deleteDir()
+		new File(zipFileName).delete()
 	}
 }
