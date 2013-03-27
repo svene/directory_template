@@ -15,7 +15,7 @@ class TemplateFolderToFolderCreator {
 		String zipFileName = "${workingDir}/${templateName}.zip"
 
 		// zip template directory (just to be able to reuse 'TemplateUnpacker''s filename binding capabilities):
-		new AntBuilder().zip(basedir: templateDirectoryName, destfile: zipFileName, includes: "${templateName}/**")
+		new AntBuilder().zip(basedir: "$templateDirectoryName/..", destfile: zipFileName, includes: "${templateName}/**")
 		def zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFileName)))
 
 		// unzip again with bindings applied:

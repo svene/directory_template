@@ -9,8 +9,7 @@ import org.svenehrke.directorytemplate.TemplateFolderToFolderCreator
 
 class GdtMain {
 	String userHome = System.properties['user.home']
-	String gdtHome = System.properties['user.home'] + '/.gdt'
-	String templateDirectory = 'templatedirectory'
+	String gdtHome = "${userHome}/.gdt"
 
 	def run(String[] args) {
 		if (args.size() < 1) {
@@ -55,11 +54,9 @@ class GdtMain {
 			println "Repository '${remoteUrl}' cloned into local folder '${localRepoLocation}'"
 		}
 		else if (command == 'list') {
-			new File(gdtHome).eachDir { f ->
-				println "${f.name}:"
-				new File("${gdtHome}/${f.name}/templatedirectory").eachDir { dt ->
-					println "  ${dt.name}"
-				}
+			Map<String, File> at = availableTemplates()
+			at.each() {k, v ->
+				println "$k ($v)"
 			}
 		}
 		else if (command == 'apply') {
@@ -68,19 +65,41 @@ class GdtMain {
 				System.exit(1)
 			}
 			// todo: dynamically read in installed directory templates. Until then hard coded here:
-			String dtName = args[1]
+			String templateName = args[1]
+			File templateDirectory = availableTemplates()[templateName]
+			if (!templateDirectory.exists()) {
+				println("template folder '${templateDirectory.absolutePath}' not found.")
+				System.exit(1)
+			}
 			def fileNameBinding = ['@packagename@': DTUtil.dotsToSlashes('org.svenehrke')]
 			def textBinding = ['packagename': 'org.svenehrke']
 
 			new TemplateFolderToFolderCreator(
-				workingDir: '/home/sven/tmp/gdt',
-				templateDirectoryName: '/home/sven/.gdt/dt_java/templatedirectory',
-				templateName: 'simplejava'
+				workingDir: '.',
+				templateDirectoryName: templateDirectory.absolutePath,
+				templateName: templateName
 			).createFolderFromTemplateFolder(fileNameBinding, textBinding)
 		}
 		else {
 			println "unknown command '${command}'"
 		}
+	}
+
+	/**
+	 * Map of available template directories by template name
+	 *
+	 * TODO: handle name class in case two template collections have the same name. E.g.:
+	 *   dt_java/simplejava
+	 *   dt_misc/simplejava
+	 */
+	Map<String, File> availableTemplates() {
+		def result = [:]
+		new File(gdtHome).eachDir { f ->
+			new File("${gdtHome}/${f.name}/templatedirectory").eachDir { dt ->
+				result[dt.name] = dt
+			}
+		}
+		result
 	}
 
 	def printUsage() {
