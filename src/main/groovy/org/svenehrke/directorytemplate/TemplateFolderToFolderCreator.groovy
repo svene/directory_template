@@ -7,18 +7,15 @@ import java.util.zip.ZipInputStream
  */
 class TemplateFolderToFolderCreator {
 
+	String workingDir
+	String templateDirectoryName
+	String templateName
+
 	void createFolderFromTemplateFolder(Map<String, String> inFilenameBinding, final Map<String, String> inTextBinding) {
-		String dtName = 'simplejava'
+		String zipFileName = "${workingDir}/${templateName}.zip"
 
-		String workingDir = '/home/sven/tmp/gdt'
-		String aTemplateDirectoryFolderName = '/home/sven/.gdt/dt_java/templatedirectory'
-		String aSourceFolderName = '/home/sven/.gdt/dt_java/templatedirectory/simplejava'
-		String zipFileName = "${workingDir}/${dtName}.zip"
-
-		// zip template directory:
-
-		new AntBuilder()
-		new AntBuilder().zip(basedir: aTemplateDirectoryFolderName, destfile: zipFileName, includes: "${dtName}/**")
+		// zip template directory (just to be able to reuse 'TemplateUnpacker''s filename binding capabilities):
+		new AntBuilder().zip(basedir: templateDirectoryName, destfile: zipFileName, includes: "${templateName}/**")
 		def zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFileName)))
 
 		// unzip again with bindings applied:
@@ -29,8 +26,8 @@ class TemplateFolderToFolderCreator {
 		DirectoryTemplateResolver.applyTextBindingToExpandedZip(aTargetFolderName, [], inTextBinding)
 
 		// Move folders from temporary directory to current folder:
-		new File("$aTargetFolderName/$dtName").eachFile { File f ->
-			f.renameTo("$workingDir/$f.name")
+		new File("$aTargetFolderName/${templateName}").eachFile { File f ->
+			f.renameTo("${workingDir}/$f.name")
 		}
 	}
 }

@@ -1,4 +1,5 @@
 package org.svenehrke.directorytemplate
+
 import groovy.util.logging.Log
 
 @Log
@@ -12,13 +13,13 @@ class DirectoryTemplateResolver {
 							//println "excluded: $file.name"
 						}
 						else {
-					println "massaging $file.path"
+							log.info "massaging $file.path"
 							try {
 								String st = file.text
 								aTextBinding.entrySet().each { entry ->
 									String k = entry.key
 									String v = entry.value
-							println "*** $k=$v"
+									log.info "*** $k=$v"
 									String sOld = ''
 									while (sOld != st) {
 										sOld = st

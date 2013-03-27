@@ -72,7 +72,11 @@ class GdtMain {
 			def fileNameBinding = ['@packagename@': DTUtil.dotsToSlashes('org.svenehrke')]
 			def textBinding = ['packagename': 'org.svenehrke']
 
-			new TemplateFolderToFolderCreator().createFolderFromTemplateFolder(fileNameBinding, textBinding)
+			new TemplateFolderToFolderCreator(
+				workingDir: '/home/sven/tmp/gdt',
+				templateDirectoryName: '/home/sven/.gdt/dt_java/templatedirectory',
+				templateName: 'simplejava'
+			).createFolderFromTemplateFolder(fileNameBinding, textBinding)
 		}
 		else {
 			println "unknown command '${command}'"

@@ -8,7 +8,11 @@ public class ApplyTest extends Specification {
 			def fileNameBinding = ['@packagename@': DTUtil.dotsToSlashes('org.svenehrke')]
 			def textBinding = ['packagename': 'org.svenehrke']
 
-			new TemplateFolderToFolderCreator().createFolderFromTemplateFolder(fileNameBinding, textBinding)
+		new TemplateFolderToFolderCreator(
+			workingDir: '/home/sven/tmp/gdt',
+			templateDirectoryName: '/home/sven/.gdt/dt_java/templatedirectory',
+			templateName: 'simplejava'
+		).createFolderFromTemplateFolder(fileNameBinding, textBinding)
 			def s = 'a'
 		then:
 			s == 'a'
