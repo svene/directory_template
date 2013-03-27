@@ -10,12 +10,6 @@ abstract class BaseDirectoryTemplateBuilder {
 
 	abstract String templateName()
 	
-	def zipName(String inTemplateName) {
-		"dt_${inTemplateName()}.zip"
-	}
-	String templateFolderName() {
-		"${metaInfoFolderName()}/${templateName()}"
-	}
 	static String metaInfoFolderName() {
 		'.directory_template'
 	}

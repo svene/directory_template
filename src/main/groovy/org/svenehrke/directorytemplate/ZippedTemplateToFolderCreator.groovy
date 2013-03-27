@@ -7,25 +7,22 @@ import java.util.zip.ZipInputStream
  */
 class ZippedTemplateToFolderCreator {
 
-	String metaInfoFolderName
-	String templateName
+	DTMetaInformation metaInformation
 
 	/** Create target folder from template folder (template method) */
-	void createTargetFolder(Map<String, String> inFilenameBinding, Map<String, String> inTextBinding,
-		String inTemplateFolderName, String inZipFilename, List<String> inExclusions) {
+	void createTargetFolder(Map<String, String> inFilenameBinding, Map<String, String> inTextBinding, List<String> inExclusions) {
 
-		def mi = new DTMetaInformation(metaInfoFolderName: metaInfoFolderName, templateName: templateName)
-		new DTMetaFolder().createMetaInfoFolder(mi)
+		new DTMetaFolder().createMetaInfoFolder(metaInformation)
 
 		// Iterate over zip-entries and create real folder layout with resolved variables from them:
-		def zipInputStream = new ZipInputStream(getClass().classLoader.getResourceAsStream(inZipFilename))
-		new TemplateUnpacker(mi.templateFolderInMetaFolder(), inFilenameBinding).createFolderFromZipInputStream(zipInputStream)
+		def zipInputStream = new ZipInputStream(getClass().classLoader.getResourceAsStream("dt_${templateName}.zip"))
+		new TemplateUnpacker(metaInformation.templateFolderInMetaFolder(), inFilenameBinding).createFolderFromZipInputStream(zipInputStream)
 
 		// Apply textBinding on extracted files:
-		DirectoryTemplateResolver.applyTextBindingToExpandedZip(inTemplateFolderName, inExclusions, inTextBinding)
+		DirectoryTemplateResolver.applyTextBindingToExpandedZip(metaInformation.templateFolderInMetaFolder(), inExclusions, inTextBinding)
 
 		// Move folders from temporary directory to current folder:
-		new File(inTemplateFolderName).eachFile { File f ->
+		new File(metaInformation.templateFolderInMetaFolder()).eachFile { File f ->
 			f.renameTo("./$f.name")
 		}
 	}
