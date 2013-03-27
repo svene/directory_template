@@ -10,6 +10,7 @@ class TemplateFolderToFolderCreator {
 	String workingDir
 	String templateDirectoryName
 	String templateName
+	String unpackFolderName
 
 	void createFolderFromTemplateFolder(Map<String, String> inFilenameBinding, final Map<String, String> inTextBinding) {
 		String zipFileName = "${workingDir}/${templateName}.zip"
@@ -19,15 +20,15 @@ class TemplateFolderToFolderCreator {
 		def zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFileName)))
 
 		// unzip again with bindings applied:
-		String aTargetFolderName = "${workingDir}/ttt"
-		new TemplateUnpacker(aTargetFolderName, inFilenameBinding).createFolderFromZipInputStream(zipInputStream)
+		new TemplateUnpacker(unpackFolderName, inFilenameBinding).createFolderFromZipInputStream(zipInputStream)
 
 		// Apply textBinding on extracted files:
-		DirectoryTemplateResolver.applyTextBindingToExpandedZip(aTargetFolderName, [], inTextBinding)
+		DirectoryTemplateResolver.applyTextBindingToExpandedZip(unpackFolderName, [], inTextBinding)
 
 		// Move folders from temporary directory to current folder:
-		new File("$aTargetFolderName/${templateName}").eachFile { File f ->
+		new File("${unpackFolderName}/${templateName}").eachFile { File f ->
 			f.renameTo("${workingDir}/$f.name")
 		}
+		new File(unpackFolderName).deleteDir()
 	}
 }

@@ -77,7 +77,8 @@ class GdtMain {
 			new TemplateFolderToFolderCreator(
 				workingDir: '.',
 				templateDirectoryName: templateDirectory.absolutePath,
-				templateName: templateName
+				templateName: templateName,
+				unpackFolderName: "./ttt"
 			).createFolderFromTemplateFolder(fileNameBinding, textBinding)
 		}
 		else {
