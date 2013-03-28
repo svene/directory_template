@@ -69,8 +69,9 @@ class GdtMain {
 				println("template folder '${templateSourceDirectory.absolutePath}' not found.")
 				System.exit(1)
 			}
+			String componentName = templateSourceDirectory.parentFile.parentFile.getName()
 
-			def cfg = new ConfigSlurper().parse(new File("$gdtHome/dt_java/config/simplejava/dt.config").toURL()).config
+			def cfg = new ConfigSlurper().parse(new File("$gdtHome/${componentName}/config/${templateName}/dt.config").toURL()).config
 			def inputParameters = cfg.parameters
 			def transformer = cfg.transformer
 			def inputParameters2 = transformer.call(inputParameters)
@@ -84,7 +85,7 @@ class GdtMain {
 			new TemplateFolderToFolderCreator(
 				gdtHome: gdtHome,
 				targetDir: '.',
-				componentName: templateSourceDirectory.parentFile.parentFile.getName(),
+				componentName: componentName,
 				templateName: templateName,
 			).createTargetFolder(fileNameBinding, textBinding)
 		}
