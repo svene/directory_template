@@ -1,6 +1,6 @@
 package org.svenehrke.directorytemplate
 
-class DTMetaInformation {
+class DTMetaInfo {
 	String metaInfoFolderName
 	String templateName
 

@@ -7,12 +7,12 @@ import java.util.zip.ZipInputStream
  */
 class ZippedTemplateToFolderCreator {
 
-	DTMetaInformation metaInformation
+	DTMetaInfo metaInformation
 
 	/** Create target folder from template folder (template method) */
 	void createTargetFolder(Map<String, String> inFilenameBinding, Map<String, String> inTextBinding, List<String> inExclusions) {
 
-		new DTMetaFolder(metaInformation: metaInformation).createMetaInfoFolder(metaInformation)
+		new DTMetaInfoFolder(metaInformation: metaInformation).createMetaInfoFolder(metaInformation)
 
 		// Iterate over zip-entries and create real folder layout with resolved variables from them:
 		def zipInputStream = new ZipInputStream(getClass().classLoader.getResourceAsStream("dt_${metaInformation.templateName}.zip"))

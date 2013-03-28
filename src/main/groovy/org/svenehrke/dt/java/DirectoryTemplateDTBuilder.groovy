@@ -21,8 +21,8 @@ class DirectoryTemplateDTBuilder extends StandardDTBuilder {
 		String lcTemplatename = pTemplatename.value.toLowerCase()
 		result <<
 		[
-			'lctemplatename': new DTInputParameter(name: 'lctemplatename', value: lcTemplatename),
-			'packagename': new DTInputParameter(name: 'packagename', value: "${pGroup.value.toLowerCase()}.$lcTemplatename"),
+			new DTInputParameter(name: 'lctemplatename', value: lcTemplatename),
+			new DTInputParameter(name: 'packagename', value: "${pGroup.value.toLowerCase()}.$lcTemplatename"),
 		]
 		result
 	}

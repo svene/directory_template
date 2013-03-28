@@ -3,9 +3,9 @@ package org.svenehrke.directorytemplate
 import groovy.util.logging.Log
 
 @Log
-class DTMetaFolder {
+class DTMetaInfoFolder {
 
-	DTMetaInformation metaInformation
+	DTMetaInfo metaInformation
 
 	def createMetaInfoFolder() {
 		new File(metaInformation.templateFolderInMetaFolder()).mkdirs()

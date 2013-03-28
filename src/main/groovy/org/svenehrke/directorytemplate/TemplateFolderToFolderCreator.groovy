@@ -14,8 +14,8 @@ class TemplateFolderToFolderCreator {
 
 	void createTargetFolder(Map<String, String> inFilenameBinding, final Map<String, String> inTextBinding) {
 
-		DTMetaInformation mi = new DTMetaInformation(metaInfoFolderName: "$targetDir/${DTConstants.META_INFO_FOLDERNAME}", templateName: templateName)
-		new DTMetaFolder(metaInformation: mi).createMetaInfoFolder()
+		DTMetaInfo mi = new DTMetaInfo(metaInfoFolderName: "$targetDir/${DTConstants.META_INFO_FOLDERNAME}", templateName: templateName)
+		new DTMetaInfoFolder(metaInformation: mi).createMetaInfoFolder()
 
 
 		String zipFileName = "${mi.metaInfoFolderName}/${templateName}.zip"
