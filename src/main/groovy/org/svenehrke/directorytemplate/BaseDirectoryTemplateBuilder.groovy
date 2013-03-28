@@ -12,12 +12,12 @@ abstract class BaseDirectoryTemplateBuilder {
 		// Get all defined input parameters for this template:
 		Collection<DTInputParameter> inputParameters = newInputParameters()
 
-		new DTInputParameterStorage().applyStoredPropertiesToInputParameters(inMetaInformation, inputParameters)
+		new DTInputParameterStorage().loadParameters(inMetaInformation, inputParameters)
 
 		// Now ask user for each input value:
-		DTUtil.askForInputParameters(inputParameters)
+		new ConsoleInputParameterProvider().askForInputParameters(inputParameters)
 
-		new DTInputParameterStorage().applyParametersToProperties(inMetaInformation, inputParameters)
+		new DTInputParameterStorage().storeParameters(inMetaInformation, inputParameters)
 
 		inputParameters << newDerivedInputParameters(inputParameters)
 		inputParameters

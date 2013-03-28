@@ -1,9 +1,10 @@
 package org.svenehrke.directorytemplate.tool
+
 import org.eclipse.jgit.api.CloneCommand
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
-import org.svenehrke.directorytemplate.TemplateFolderToFolderCreator
+import org.svenehrke.directorytemplate.*
 
 class GdtMain {
 	String userHome = System.properties['user.home']
@@ -71,8 +72,21 @@ class GdtMain {
 			}
 			String componentName = templateSourceDirectory.parentFile.parentFile.getName()
 
+			String targetDir = '.'
+
+			// Collect input parameters:
+			DTMetaInfo mi = new DTMetaInfo(metaInfoFolderName: "$targetDir/${DTConstants.META_INFO_FOLDERNAME}" , templateName: templateName)
+
+
 			def cfg = new ConfigSlurper().parse(new File("$gdtHome/${componentName}/config/${templateName}/dt.config").toURL()).config
-			def inputParameters = cfg.parameters
+			Collection inputParameters = cfg.parameters
+			new DTInputParameterStorage().loadParameters(mi, inputParameters)
+
+			// Now ask user for each input value:
+			def inputParameterProvider = System.properties['development'] ? new DevelopmentInputParameterProvider() : new ConsoleInputParameterProvider()
+			inputParameterProvider.askForInputParameters(inputParameters)
+			new DTInputParameterStorage().storeParameters(mi, inputParameters)
+
 			def transformer = cfg.transformer
 			def inputParameters2 = transformer.call(inputParameters)
 
@@ -84,7 +98,7 @@ class GdtMain {
 
 			new TemplateFolderToFolderCreator(
 				gdtHome: gdtHome,
-				targetDir: '.',
+				targetDir: targetDir,
 				componentName: componentName,
 				templateName: templateName,
 			).createTargetFolder(fileNameBinding, textBinding)

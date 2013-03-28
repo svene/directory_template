@@ -10,6 +10,6 @@ class DTMetaInfo {
 	}
 
 	String inputParametersFilename() {
-		"${metaInfoFolderName}/${templateName}"
+		"${metaInfoFolderName}/inputParameters.properties"
 	}
 }
