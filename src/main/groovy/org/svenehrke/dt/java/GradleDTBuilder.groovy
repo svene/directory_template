@@ -5,9 +5,9 @@ import org.svenehrke.directorytemplate.DTInputParameter
 class GradleDTBuilder extends StandardDTBuilder {
 
 	@Override
-	Map<String, DTInputParameter> newInputParameters() {
-		Map<String, DTInputParameter> result = super.newInputParameters()
-		result['packagename'] = new DTInputParameter(value: 'org.svenehrke.simplejava', prompt: 'Packagename')
+	Collection<DTInputParameter> newInputParameters() {
+		Collection<DTInputParameter> result = super.newInputParameters()
+		result['packagename'] = new DTInputParameter(name: 'packagename', value: 'org.svenehrke.simplejava', prompt: 'Packagename')
 		result
 	}
 

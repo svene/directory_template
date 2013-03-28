@@ -3,7 +3,6 @@ import org.eclipse.jgit.api.CloneCommand
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
-import org.svenehrke.directorytemplate.DTUtil
 import org.svenehrke.directorytemplate.TemplateFolderToFolderCreator
 
 class GdtMain {
@@ -70,8 +69,17 @@ class GdtMain {
 				println("template folder '${templateSourceDirectory.absolutePath}' not found.")
 				System.exit(1)
 			}
-			def fileNameBinding = ['@packagename@': DTUtil.dotsToSlashes('org.svenehrke')]
-			def textBinding = ['packagename': 'org.svenehrke']
+
+			def cfg = new ConfigSlurper().parse(new File("$gdtHome/dt_java/config/simplejava/dt.config").toURL()).config
+			def inputParameters = cfg.parameters
+			def transformer = cfg.transformer
+			def inputParameters2 = transformer.call(inputParameters)
+
+			Collection fileNameParameters = inputParameters2.findAll { param -> param.name.startsWith('@') }
+			Collection textParameters = inputParameters2.findAll { param -> !param.name.startsWith('@') }
+			Map fileNameBinding = fileNameParameters.collectEntries([:]) {param -> [param.name, param.value] }
+			Map textBinding = textParameters.collectEntries([:]) {param -> [param.name, param.value] }
+
 
 			new TemplateFolderToFolderCreator(
 				gdtHome: gdtHome,

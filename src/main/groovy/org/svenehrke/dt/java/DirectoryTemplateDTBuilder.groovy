@@ -1,26 +1,28 @@
 package org.svenehrke.dt.java
-
 import org.svenehrke.directorytemplate.DTInputParameter
 import org.svenehrke.directorytemplate.DTUtil
 
 class DirectoryTemplateDTBuilder extends StandardDTBuilder {
 
 	@Override
-	Map<String, DTInputParameter> newInputParameters() {
+	Collection<DTInputParameter> newInputParameters() {
 		Map<String, DTInputParameter> result = super.newInputParameters()
-		result['group'] = new DTInputParameter(value: 'org.mygroup', prompt: 'Maven Group: ')
-		result['templatename'] = new DTInputParameter(value: 'MyTemplate', prompt: 'Template name: ')
+		result['group'] = new DTInputParameter(name: 'group', value: 'org.mygroup', prompt: 'Maven Group: ')
+		result['templatename'] = new DTInputParameter(name: 'templatename', value: 'MyTemplate', prompt: 'Template name: ')
 		result
 	}
 
 	@Override
-	Map<String, DTInputParameter> newDerivedInputParameters(Map<String, DTInputParameter> aInputParameters) {
-		Map<String, DTInputParameter> result = super.newInputParameters()
-		String lcTemplatename = aInputParameters.templatename.value.toLowerCase()
+	Collection<DTInputParameter> newDerivedInputParameters(Collection<DTInputParameter> aInputParameters) {
+		Collection<DTInputParameter> result = super.newInputParameters()
+
+		def pTemplatename = aInputParameters.find {param -> param.name == 'templatename'}
+		def pGroup = aInputParameters.find {param -> param.name == 'group'}
+		String lcTemplatename = pTemplatename.value.toLowerCase()
 		result <<
 		[
-			'lctemplatename': new DTInputParameter(value: lcTemplatename)
-			, 'packagename': new DTInputParameter(value: "${aInputParameters.group.value.toLowerCase()}.$lcTemplatename")
+			'lctemplatename': new DTInputParameter(name: 'lctemplatename', value: lcTemplatename),
+			'packagename': new DTInputParameter(name: 'packagename', value: "${pGroup.value.toLowerCase()}.$lcTemplatename"),
 		]
 		result
 	}

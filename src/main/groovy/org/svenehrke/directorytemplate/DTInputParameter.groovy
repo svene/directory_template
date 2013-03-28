@@ -1,12 +1,14 @@
 package org.svenehrke.directorytemplate
 
 class DTInputParameter {
-	String value, prompt
+	String name, value, prompt
 
-
-	String toString ( ) {
-	return "DTInputParameter{" +
-	"value='" + value + '\'' +
-	", prompt='" + prompt + '\'' +
-	'}' ;
-	}}
+	@Override
+	public String toString() {
+		return "DTInputParameter{" +
+			"name='" + name + '\'' +
+			", value='" + value + '\'' +
+			", prompt='" + prompt + '\'' +
+			'}';
+	}
+}

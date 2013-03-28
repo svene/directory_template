@@ -8,34 +8,46 @@ import groovy.util.logging.Log
 abstract class BaseDirectoryTemplateBuilder {
 	Map<String, DTInputParameter> inputParameters
 
-	Map<String, DTInputParameter> askForInputParameters(Map<String, DTInputParameter> aInputParameters, DTMetaInformation inMetaInformation) {
+	Map<String, DTInputParameter> askForInputParameters(DTMetaInformation inMetaInformation) {
 		// Get all defined input parameters for this template:
-		Map<String, DTInputParameter> result = newInputParameters()
+		Map<String, DTInputParameter> inputParameterMap = newInputParameters()
 
-		def metaFolder = new DTMetaFolder(metaInformation: inMetaInformation)
+		applyStoredPropertiesToInputParameters(inMetaInformation, inputParameterMap.values())
+
+		// Now ask user for each input value:
+		DTUtil.askForInputParameters(inputParameterMap.values())
+
+		applyParametersToProperties(inMetaInformation, inputParameterMap.values())
+
+		inputParameterMap.putAll(newDerivedInputParameters(inputParameterMap.values()))
+		inputParameterMap
+	}
+
+	def applyStoredPropertiesToInputParameters(DTMetaInformation inMetaInformation, Collection<DTInputParameter> inInputParameters) {
+		DTMetaFolder metaFolder = new DTMetaFolder(metaInformation: inMetaInformation)
 
 		// Load properties from previous runs:
 		Properties props = metaFolder.newPropertiesFromFile()
 
 		// Apply property values from previous runs to values of defined input parameters:
-		new DTInputParameters().applyPropertiesToInputParameters(result, props)
+		new DTInputParameters().applyPropertiesToInputParameters(inInputParameters, props)
+	}
 
-		// Now ask user for each input value:
-		DTUtil.askForInputParameters(result*.value)
-		result << aInputParameters
+	/** Store possibly modified parameters back to property file */
+	def applyParametersToProperties(DTMetaInformation inMetaInformation, Collection<DTInputParameter> inInputParameters) {
+		DTMetaFolder metaFolder = new DTMetaFolder(metaInformation: inMetaInformation)
+		Properties props = metaFolder.newPropertiesFromFile()
 
-		// Store possibly modified parameters back as property file:
-		new DTInputParameters().applyParametersToProperties(result, props)
+		new DTInputParameters().applyParametersToProperties(inInputParameters, props)
 		metaFolder.storeProperties(props)
 
-		result.putAll(newDerivedInputParameters(result))
-		result
 	}
 
-	Map<String, DTInputParameter> newInputParameters() {
-		[:]
+	Collection<DTInputParameter> newInputParameters() {
+		[]
 	}
-	Map<String, DTInputParameter> newDerivedInputParameters(Map<String, DTInputParameter> aInputParameters) {
+
+	Collection<DTInputParameter> newDerivedInputParameters(Collection<DTInputParameter> aInputParameters) {
 		[:]
 	}
 

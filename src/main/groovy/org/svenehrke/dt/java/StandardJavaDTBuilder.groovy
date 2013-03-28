@@ -6,13 +6,13 @@ import org.svenehrke.directorytemplate.DTUtil
 abstract class StandardJavaDTBuilder extends StandardDTBuilder {
 
 	@Override
-	Map<String, DTInputParameter> newInputParameters() {
+	Collection<DTInputParameter> newInputParameters() {
 		def result = super.newInputParameters()
 		result
 	}
 
 	@Override
-	Map<String, String> newFilenameBinding(Map<String, DTInputParameter> aInputParameters) {
+	Map<String, String> newFilenameBinding(Collection<DTInputParameter> aInputParameters) {
 		Map result = super.newFilenameBinding(aInputParameters)
 		result <<
 		[
@@ -22,7 +22,7 @@ abstract class StandardJavaDTBuilder extends StandardDTBuilder {
 	}
 
 	@Override
-	Map<String, String> newTextBinding(Map<String, DTInputParameter> aInputParameters) {
+	Map<String, String> newTextBinding(Collection<DTInputParameter> aInputParameters) {
 		Map result = super.newTextBinding(aInputParameters)
 		result <<
 		[

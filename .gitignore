@@ -1,5 +1,6 @@
 build/
 .gradle/
+classes/
 directory_template.ipr
 directory_template.iws
 directory_template.iml

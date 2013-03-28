@@ -29,7 +29,7 @@ class Invoker {
 
 		// Collect input parameters:
 		def mi = new DTMetaInformation(metaInfoFolderName: DTConstants.META_INFO_FOLDERNAME, templateName: templateName)
-		def inputParameters = builder.askForInputParameters([:], mi)
+		def inputParameters = builder.askForInputParameters(mi)
 
 		// Create folder from template:
 		new ZippedTemplateToFolderCreator(metaInformation: mi).createTargetFolder(

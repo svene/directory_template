@@ -15,19 +15,14 @@ class DTUtil {
 	static askForInputParameter(DTInputParameter aInputParameter) {
 		aInputParameter.value = prompt(aInputParameter.prompt, aInputParameter.value)
 	}
-	static askForInputParameters(List<DTInputParameter> aInputParameters) {
+	static askForInputParameters(Collection<DTInputParameter> aInputParameters) {
 		aInputParameters.each() { ip ->
 			askForInputParameter ip
-//			ip.value = prompt(ip.prompt, ip.value)
 		}
 	}
 
 	static Map inputParametersAsMap(List<DTInputParameter> aInputParameters) {
-		def result = [:]
-		aInputParameters.each() { ip ->
-			result[ip.key] = ip.value
-		}
-		result
+		aInputParameters.inject([:]) {map, param -> map << [(param.name): param]}
 	}
 	// original routine from gradle-template plugin:
 	static String prompt(String message, String defaultValue = null) {

@@ -1,18 +1,26 @@
 package org.svenehrke.directorytemplate
 
+import groovy.util.logging.Log
+
+@Log
 class DTInputParameters {
-	def applyParametersToProperties(Map<String, DTInputParameter> parameters, Properties props) {
+
+	def find(String inName, def inInputParameters) {
+		inInputParameters.find {param -> param.name == inName}
+	}
+
+	def applyParametersToProperties(Collection<DTInputParameter> parameters, Properties props) {
 		parameters.each {ip ->
-			log.info "-->setting property $ip.key to $ip.value.value"
-			props.setProperty(ip.key, ip.value.value)
+			log.info "-->setting property $ip.key to $ip.value"
+			props.setProperty(ip.name, ip.value)
 		}
 	}
 
-	def applyPropertiesToInputParameters(Map<String, DTInputParameter> parameters, Properties props) {
+	def applyPropertiesToInputParameters(Collection<DTInputParameter> parameters, Properties props) {
 		parameters.each {ip ->
-			String v = props.get(ip.key)
+			String v = props.get(ip.name)
 			if (v) {
-				ip.value.value = v // Put property value on value of DTInputParameter
+				ip.value = v // Put property value on value of DTInputParameter
 			}
 		}
 	}
