@@ -1,7 +1,5 @@
 @GrabResolver(name='sven-github', root='http://svene.github.com/maven2/releases')
-@Grab(group='org.svenehrke', module='directorytemplate', version='0.0.5')
+@Grab(group='org.svenehrke', module='directory_template', version='0.0.6-SNAPSHOT')
 import org.svenehrke.directorytemplate.tool.GdtMain
-
-println "hallo"
 
 new GdtMain().run(args)
