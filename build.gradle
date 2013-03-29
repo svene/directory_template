@@ -9,8 +9,8 @@ apply plugin: 'idea'
 apply plugin: 'maven'
 
 group = 'org.svenehrke'
-archivesBaseName = 'directorytemplate'
-version = '0.0.5'
+archivesBaseName = 'directory_template'
+version = '0.0.6'
 
 idea {
 	project {
