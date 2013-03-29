@@ -1,3 +1,7 @@
+//buildscript {
+//	apply from: 'gradle/Bintray.gradle' // see https://bitbucket.org/davidmc24/gradle-bintray-plugin
+//}
+
 /*
  * create snapshot: gradle makeSnapshot
  * create release: gradle makeRelease
