@@ -18,7 +18,8 @@ is not able to detect snapshot updates.
 * after having done some development work in your template (e.g. simplejava)
   * TODO: implement feature 'install from folder'
   * execute: groovy start.groovy install -folder <somefolder>
-  the last part of the folder will become the template component name
+  e.g.: groovy <path to>/directory_template/start.groovy install -folder <path to>/dt_java
+  the last part of the folder will become the name of the component template
 
 This will install the template component into $HOME/.gdt
 
