@@ -1,5 +1,6 @@
 package org.svenehrke.directorytemplate.tool
 
+import org.apache.commons.io.FileUtils
 import org.eclipse.jgit.api.CloneCommand
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
@@ -36,22 +37,50 @@ class GdtMain {
 				ghRepoName = args[3]
 				remoteUrl = "https://github.com/${ghUserName}/${ghRepoName}.git"
 				localRepoLocation = "${gdtHome}/${ghRepoName}"
+
+				FileRepositoryBuilder builder = new FileRepositoryBuilder();
+				Repository repository = builder.setWorkTree(new File(gdtHome)).build()
+				Git git = new Git(repository);
+				CloneCommand clone = git.cloneRepository();
+				clone.setBare(false);
+				clone.setCloneAllBranches(true);
+				clone.setDirectory(new File(localRepoLocation)).setURI(remoteUrl);
+				clone.call();
+
+				println "Repository '${remoteUrl}' cloned into local folder '${localRepoLocation}'"
+			}
+			else if (folderMode) {
+				if (args.size() != 3) {
+					printUsage()
+					System.exit(1)
+				}
+				String sourceFolderName = args[2]
+				File sourceFolder = new File(sourceFolderName)
+				if (!sourceFolder.exists()) {
+					println "Folder '$sourceFolderName' not found"
+					System.exit(1)
+				}
+				if (!new File("$sourceFolderName/templatedirectory").exists()) {
+					println "Source folder '$sourceFolderName' is not a valid template component (does not contain a subfolder named 'templatedirectory')"
+					System.exit(1)
+				}
+				String componentName = sourceFolder.getName()
+
+				String targetFolderName = "$gdtHome/$componentName"
+				File targetFolder = new File(targetFolderName)
+				if (targetFolder.exists()) {
+					println "Target folder '$targetFolderName' already exists. Please remove it first."
+					System.exit(1)
+				}
+
+				FileUtils.copyDirectory(sourceFolder, targetFolder)
+				println "template component '$componentName' successfully installed"
 			}
 			else {
-				println 'Non github mode not supported yet'
+				printUsage()
 				System.exit(0)
 			}
 
-			FileRepositoryBuilder builder = new FileRepositoryBuilder();
-			Repository repository = builder.setWorkTree(new File(gdtHome)).build()
-			Git git = new Git(repository);
-			CloneCommand clone = git.cloneRepository();
-			clone.setBare(false);
-			clone.setCloneAllBranches(true);
-			clone.setDirectory(new File(localRepoLocation)).setURI(remoteUrl);
-			clone.call();
-
-			println "Repository '${remoteUrl}' cloned into local folder '${localRepoLocation}'"
 		}
 		else if (command == 'list') {
 			Map<String, File> at = availableTemplates()
@@ -130,15 +159,17 @@ class GdtMain {
 	def printUsage() {
 		println """
 	usage:
-	  groovy gdt2.groovy install -github <user> <repo> <templatedirectory (default='templatedirectory')>
-	  //groovy gdt2.groovy install <repourl> <templatedirectory (default='templatedirectory')>
-	  groovy gdt2.groovy list
-	  groovy gdt2.groovy apply <directorytemplate>
+	  groovy start.groovy install -github <user> <repo> <templatedirectory (default='templatedirectory')>
+	  groovy start.groovy install -folder <path to>/<template component>
+	  //TBD: groovy start.groovy install <repourl> <templatedirectory (default='templatedirectory')>
+	  groovy start.groovy list
+	  groovy start.groovy apply <directorytemplate>
 
 	examples:
-	  groovy gdt2.groovy install -github svene dt_java
-	  //groovy gdt2.groovy https://github.com/svene/dt_java.git
-	  groovy gdt2.groovy apply simplejava
+	  groovy start.groovy install -github svene dt_java
+	  groovy start.groovy install -folder ~/template_components/dt_java
+	  //TBD: groovy start.groovy https://github.com/svene/dt_java.git
+	  groovy start.groovy apply simplejava
 	"""
 	}
 }
