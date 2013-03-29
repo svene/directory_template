@@ -3,7 +3,6 @@ package org.svenehrke.directorytemplate
 class ConsoleInputParameterProvider {
 
 	def askForInputParameters(Collection aInputParameters) {
-		println aInputParameters
 		aInputParameters.each() { ip ->
 			askForInputParameter ip
 		}

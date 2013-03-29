@@ -109,7 +109,7 @@ class GdtMain {
 			DTMetaInfo mi = new DTMetaInfo(metaInfoFolderName: "$targetDir/${DTConstants.META_INFO_FOLDERNAME}" , templateName: templateName)
 
 
-			def cfg = new ConfigSlurper().parse(new File("$gdtHome/${componentName}/${templateName}/.config/dt_config.groovy").toURL()).config
+			def cfg = new ConfigSlurper().parse(new File("$gdtHome/${componentName}/templatedirectory/${templateName}/.config/dt_config.groovy").toURL()).config
 			Collection inputParameters = cfg.parameters
 			new DTInputParameterStorage().loadParameters(mi, inputParameters)
 
