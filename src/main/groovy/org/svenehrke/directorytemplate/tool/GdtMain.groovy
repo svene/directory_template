@@ -54,8 +54,9 @@ class GdtMain {
 		}
 		else if (command == 'list') {
 			Map<String, File> at = availableTemplates()
+			int max = (at.keySet().max { it.length() }).length()
 			at.each() {k, v ->
-				println "$k ($v)"
+				println "${k.padLeft(max, ' ')}: ($v)"
 			}
 		}
 		else if (command == 'apply') {
@@ -78,7 +79,7 @@ class GdtMain {
 			DTMetaInfo mi = new DTMetaInfo(metaInfoFolderName: "$targetDir/${DTConstants.META_INFO_FOLDERNAME}" , templateName: templateName)
 
 
-			def cfg = new ConfigSlurper().parse(new File("$gdtHome/${componentName}/config/${templateName}/dt.config").toURL()).config
+			def cfg = new ConfigSlurper().parse(new File("$gdtHome/${componentName}/${templateName}/.config/dt_config.groovy").toURL()).config
 			Collection inputParameters = cfg.parameters
 			new DTInputParameterStorage().loadParameters(mi, inputParameters)
 
