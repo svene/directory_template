@@ -142,7 +142,7 @@ class GdtMain {
 	/**
 	 * Map of available template directories by template name
 	 *
-	 * TODO: handle name class in case two template collections have the same name. E.g.:
+	 * TODO: handle name clash in case two template collections have the same name. E.g.:
 	 *   dt_java/simplejava
 	 *   dt_misc/simplejava
 	 */
