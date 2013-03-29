@@ -21,6 +21,7 @@ class GdtMain {
 		if (command == 'install') {
 
 			def gitHubMode = args[1] == '-github'
+			def folderMode = args[1] == '-folder'
 
 			String ghUserName = 'svene'
 			String ghRepoName = 'dt_java'
