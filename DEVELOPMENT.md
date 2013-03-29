@@ -11,6 +11,10 @@ a snapshot jar into your local maven repository (typically located in $HOME/.m2)
 * add local .m2 to grab resolvers: see: http://groovy.codehaus.org/Grape#Grape-CustomizeIvysettings
 
 ###Template Development
+If you have installed a new snapshot version of 'directory_template' into your local maven respository
+you first need to manually remove the old cached version from your grapes ($HOME/.groovy/grapes) since the grape mechanism
+is not able to detect snapshot updates.
+
 * after having done some development work in your template (e.g. simplejava)
   * TODO: implement feature 'install from folder'
   * execute: groovy start.groovy install -folder <somefolder>
