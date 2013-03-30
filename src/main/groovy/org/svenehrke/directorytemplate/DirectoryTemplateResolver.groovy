@@ -5,7 +5,7 @@ import groovy.util.logging.Log
 @Log
 class DirectoryTemplateResolver {
 
-	static void applyTextBindingToExpandedZip(String aRootDir, fileExclusionFilter, Map<String, String> aTextBinding) {
+	static void applyTextBindingToFolder(String aRootDir, fileExclusionFilter, Map<String, String> aTextBinding) {
 		if (aTextBinding) {
 			new File(aRootDir).eachFileRecurse { file ->
 				if (!file.directory) {

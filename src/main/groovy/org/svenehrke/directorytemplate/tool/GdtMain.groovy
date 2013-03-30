@@ -111,7 +111,7 @@ class GdtMain {
 			String targetDir = '.'
 
 			// Collect input parameters:
-			DTMetaInfo mi = new DTMetaInfo(metaInfoFolderName: "$targetDir/${DTConstants.META_INFO_FOLDERNAME}" , templateName: templateName)
+			DTMetaInfo mi = new DTMetaInfo(metaInfoFolderName: "$targetDir/${DTMetaInfo.META_INFO_FOLDERNAME}" , templateName: templateName)
 
 
 			def cfg = new ConfigSlurper().parse(new File("$gdtHome/${componentName}/templates/${templateName}/.config/dt_config.groovy").toURL()).config

@@ -31,3 +31,6 @@ will show the installed template component:
 * groovy <path to>/directory_template/start.groovy apply simplejava
   will expand the 'simplejava' template into the current folder
 
+###Other notes
+*find file extensions in folder (http://lookherefirst.wordpress.com/2008/10/01/how-to-list-all-file-extensions-within-a-directory/)):
+find build -type f| sed -e "s/.*\./\./"|sort|uniq -c|grep -e '\..*'|sort -rn

@@ -18,7 +18,7 @@ class TemplateFolderToFolderCreator {
 
 	void createTargetFolder(Map<String, String> inFilenameBinding, final Map<String, String> inTextBinding) {
 
-		DTMetaInfo mi = new DTMetaInfo(metaInfoFolderName: "$targetDir/${DTConstants.META_INFO_FOLDERNAME}", templateName: templateName)
+		DTMetaInfo mi = new DTMetaInfo(metaInfoFolderName: "$targetDir/${DTMetaInfo.META_INFO_FOLDERNAME}", templateName: templateName)
 		new DTMetaInfoFolder(metaInformation: mi).createMetaInfoFolder()
 
 
@@ -34,7 +34,7 @@ class TemplateFolderToFolderCreator {
 
 		// Apply textBinding on extracted files:
 		String templatedirectory = "${mi.templateFolderInMetaFolder()}/templatedirectory"
-		DirectoryTemplateResolver.applyTextBindingToExpandedZip(templatedirectory, fileExclusionFilter, inTextBinding)
+		DirectoryTemplateResolver.applyTextBindingToFolder(templatedirectory, fileExclusionFilter, inTextBinding)
 
 		// Move folders from temporary directory to current folder:
 		new File(templatedirectory).eachFile { File f ->
