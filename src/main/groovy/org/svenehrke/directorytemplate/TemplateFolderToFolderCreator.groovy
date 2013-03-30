@@ -14,6 +14,7 @@ class TemplateFolderToFolderCreator {
 	String targetDir
 	String componentName
 	String templateName
+	def fileExclusionFilter
 
 	void createTargetFolder(Map<String, String> inFilenameBinding, final Map<String, String> inTextBinding) {
 
@@ -33,7 +34,7 @@ class TemplateFolderToFolderCreator {
 
 		// Apply textBinding on extracted files:
 		String templatedirectory = "${mi.templateFolderInMetaFolder()}/templatedirectory"
-		DirectoryTemplateResolver.applyTextBindingToExpandedZip(templatedirectory, [], inTextBinding)
+		DirectoryTemplateResolver.applyTextBindingToExpandedZip(templatedirectory, fileExclusionFilter, inTextBinding)
 
 		// Move folders from temporary directory to current folder:
 		new File(templatedirectory).eachFile { File f ->

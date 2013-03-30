@@ -5,12 +5,13 @@ import groovy.util.logging.Log
 @Log
 class DirectoryTemplateResolver {
 
-	static void applyTextBindingToExpandedZip(String aRootDir, List<String> aExclusions, Map<String, String> aTextBinding) {
+	static void applyTextBindingToExpandedZip(String aRootDir, fileExclusionFilter, Map<String, String> aTextBinding) {
 		if (aTextBinding) {
 			new File(aRootDir).eachFileRecurse { file ->
 				if (!file.directory) {
-						if (aExclusions.any { x -> file.name.endsWith(x) }) {
-							//println "excluded: $file.name"
+						println "handling file ${file.name}"
+						if (fileExclusionFilter?.call(file)) {
+							log.info"excluded: '$file.name' from text binding processing"
 						}
 						else {
 							log.info "massaging $file.path"

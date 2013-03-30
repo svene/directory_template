@@ -132,11 +132,14 @@ class GdtMain {
 			Map textBinding = textParameters.collectEntries([:]) {param -> [param.name, param.value] }
 
 
+			def fileExclusionFilter = cfg.textBinding?.fileExclusionFilter
+
 			new TemplateFolderToFolderCreator(
 				gdtHome: gdtHome,
 				targetDir: targetDir,
 				componentName: componentName,
 				templateName: templateName,
+				fileExclusionFilter: fileExclusionFilter,
 			).createTargetFolder(fileNameBinding, textBinding)
 		}
 		else {
