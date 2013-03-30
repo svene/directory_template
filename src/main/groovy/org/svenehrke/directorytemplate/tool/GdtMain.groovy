@@ -60,8 +60,8 @@ class GdtMain {
 					println "Folder '$sourceFolderName' not found"
 					System.exit(1)
 				}
-				if (!new File("$sourceFolderName/templatedirectory").exists()) {
-					println "Source folder '$sourceFolderName' is not a valid template component (does not contain a subfolder named 'templatedirectory')"
+				if (!new File("$sourceFolderName/templates").exists()) {
+					println "Source folder '$sourceFolderName' is not a valid template component (does not contain a subfolder named 'templates')"
 					System.exit(1)
 				}
 				String componentName = sourceFolder.getName()
@@ -84,9 +84,14 @@ class GdtMain {
 		}
 		else if (command == 'list') {
 			Map<String, File> at = availableTemplates()
-			int max = (at.keySet().max { it.length() }).length()
-			at.each() {k, v ->
-				println "${k.padLeft(max, ' ')}: ($v)"
+			if (at.isEmpty()) {
+				println "no templates are installed"
+			}
+			else {
+				int max = (at.keySet().max { it.length() }).length()
+				at.each() {k, v ->
+					println "${k.padLeft(max, ' ')}: ($v)"
+				}
 			}
 		}
 		else if (command == 'apply') {
@@ -109,7 +114,7 @@ class GdtMain {
 			DTMetaInfo mi = new DTMetaInfo(metaInfoFolderName: "$targetDir/${DTConstants.META_INFO_FOLDERNAME}" , templateName: templateName)
 
 
-			def cfg = new ConfigSlurper().parse(new File("$gdtHome/${componentName}/templatedirectory/${templateName}/.config/dt_config.groovy").toURL()).config
+			def cfg = new ConfigSlurper().parse(new File("$gdtHome/${componentName}/templates/${templateName}/.config/dt_config.groovy").toURL()).config
 			Collection inputParameters = cfg.parameters
 			new DTInputParameterStorage().loadParameters(mi, inputParameters)
 
@@ -149,7 +154,7 @@ class GdtMain {
 	Map<String, File> availableTemplates() {
 		def result = [:]
 		new File(gdtHome).eachDir { f ->
-			new File("${gdtHome}/${f.name}/templatedirectory").eachDir { dt ->
+			new File("${gdtHome}/${f.name}/templates").eachDir { dt ->
 				result[dt.name] = dt
 			}
 		}
@@ -159,16 +164,14 @@ class GdtMain {
 	def printUsage() {
 		println """
 	usage:
-	  groovy start.groovy install -github <user> <repo> <templatedirectory (default='templatedirectory')>
+	  groovy start.groovy install -github <user> <repo>>
 	  groovy start.groovy install -folder <path to>/<template component>
-	  //TBD: groovy start.groovy install <repourl> <templatedirectory (default='templatedirectory')>
 	  groovy start.groovy list
 	  groovy start.groovy apply <directorytemplate>
 
 	examples:
 	  groovy start.groovy install -github svene dt_java
 	  groovy start.groovy install -folder ~/template_components/dt_java
-	  //TBD: groovy start.groovy https://github.com/svene/dt_java.git
 	  groovy start.groovy apply simplejava
 	"""
 	}

@@ -8,7 +8,7 @@ class DTMetaInfoFolder {
 	DTMetaInfo metaInformation
 
 	def createMetaInfoFolder() {
-		new File(metaInformation.templateFolderInMetaFolder()).mkdirs()
+		new File(metaInformation.metaInfoFolderName).mkdirs()
 		File f = new File(metaInformation.inputParametersFilename())
 		if (!f.exists()) {
 			f.createNewFile()

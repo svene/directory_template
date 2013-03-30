@@ -1,10 +1,13 @@
 package org.svenehrke.directorytemplate
 
+import groovy.util.logging.Log
+
 import java.util.zip.ZipInputStream
 
 /**
  * Capable to create a folder from a template folder
  */
+@Log
 class TemplateFolderToFolderCreator {
 
 	String gdtHome
@@ -21,7 +24,7 @@ class TemplateFolderToFolderCreator {
 		String zipFileName = "${mi.metaInfoFolderName}/${templateName}.zip"
 
 		// zip template directory (just to be able to reuse 'TemplateUnpacker''s filename binding capabilities):
-		String templateSourceDirectoryName = "$gdtHome/$componentName/templatedirectory/$templateName"
+		String templateSourceDirectoryName = "$gdtHome/$componentName/templates/$templateName"
 		new AntBuilder().zip(basedir: "$templateSourceDirectoryName/..", destfile: zipFileName, includes: "${templateName}/**")
 		def zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFileName)))
 
@@ -29,10 +32,11 @@ class TemplateFolderToFolderCreator {
 		new TemplateUnpacker(targetFolderName: mi.metaInfoFolderName, filenameBinding: inFilenameBinding).createFolderFromZipInputStream(zipInputStream)
 
 		// Apply textBinding on extracted files:
-		DirectoryTemplateResolver.applyTextBindingToExpandedZip(mi.templateFolderInMetaFolder(), [], inTextBinding)
+		String templatedirectory = "${mi.templateFolderInMetaFolder()}/templatedirectory"
+		DirectoryTemplateResolver.applyTextBindingToExpandedZip(templatedirectory, [], inTextBinding)
 
 		// Move folders from temporary directory to current folder:
-		new File(mi.templateFolderInMetaFolder()).eachFile { File f ->
+		new File(templatedirectory).eachFile { File f ->
 			f.renameTo("${targetDir}/$f.name")
 		}
 

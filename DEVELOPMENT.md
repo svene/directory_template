@@ -26,7 +26,7 @@ This will install the template component into $HOME/.gdt
 * groovy <path to>/directory_template/start.groovy list
 will show the installed template component:
 
- simplejava: (/home/sven/.gdt/dt_java/templatedirectory/simplejava)
+ simplejava: (/home/sven/.gdt/dt_java/templates/simplejava)
 
 * groovy <path to>/directory_template/start.groovy apply simplejava
   will expand the 'simplejava' template into the current folder

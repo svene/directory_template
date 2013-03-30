@@ -10,13 +10,6 @@ class TemplateUnpacker {
 	String targetFolderName
 	Map<String, String> filenameBinding
 
-/*
-	TemplateUnpacker(String aTargetFolderName, Map<String, String> aFilenameBinding) {
-		targetFolderName = aTargetFolderName
-		filenameBinding = aFilenameBinding
-	}
-*/
-
 	void createFolderFromZipInputStream(ZipInputStream inZipInputStream) {
 
 		def bindingResolver = new BindingResolver(filenameBinding)

@@ -11,3 +11,6 @@ Usage
 -----
 see https://github.com/svene/dt_java
 
+in your bin folder:
+wget https://raw.github.com/svene/directory_template/fix0.0.6/start.groovy -O gdt2.sh
+
