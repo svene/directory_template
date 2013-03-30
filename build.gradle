@@ -14,7 +14,7 @@ apply plugin: 'maven'
 
 group = 'org.svenehrke'
 archivesBaseName = 'directory_template'
-version = '0.0.7'
+version = '0.0.8'
 
 idea {
 	project {
