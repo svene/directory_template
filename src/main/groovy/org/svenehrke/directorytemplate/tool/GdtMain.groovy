@@ -157,8 +157,10 @@ class GdtMain {
 	Map<String, File> availableTemplates() {
 		def result = [:]
 		new File(gdtHome).eachDir { f ->
-			new File("${gdtHome}/${f.name}/templates").eachDir { dt ->
-				result[dt.name] = dt
+			if (!(['bin']).contains(f.name)) {
+				new File("${gdtHome}/${f.name}/templates").eachDir { dt ->
+					result[dt.name] = dt
+				}
 			}
 		}
 		result
