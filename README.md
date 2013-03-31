@@ -22,17 +22,14 @@ This will create a folder .gdt/bin in you home directory with the following stru
 
 Please append .gdt/bin to your PATH environment variable.
 
+
+##Usage
+
+
 ##Update gdt
 On the commandline invoke
 
 * groovy https://raw.github.com/svene/gdt_bin/master/gdt_update.groovy
 
 This will update the folder .gdt/bin in you home directory.
-
-
-##Usage
-see https://github.com/svene/dt_java
-
-in your bin folder:
-wget https://raw.github.com/svene/directory_template/fix0.0.6/start.groovy -O gdt2.sh
 
