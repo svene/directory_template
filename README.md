@@ -17,8 +17,8 @@ On the commandline invoke
 
 This will create a folder .gdt/bin in you home directory with the following structure:
 
-  .gdt
-  └─── bin
+	.gdt
+	└─── bin
 
 Please append .gdt/bin to your PATH environment variable.
 
