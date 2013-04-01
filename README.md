@@ -29,7 +29,7 @@ Please append .gdt/bin to your PATH environment variable.
 ##Update gdt
 On the commandline invoke
 
-* groovy https://raw.github.com/svene/gdt_bin/master/gdt_update.groovy
+* gdt.sh selfupdate
 
 This will update the folder .gdt/bin in you home directory.
 
