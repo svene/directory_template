@@ -29,7 +29,7 @@ Please add .gdt/bin to your PATH environment variable.
 
 
 ##Usage
-Example (:
+Example:
 
 * mkdir hello
 * cd hello
