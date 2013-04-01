@@ -83,7 +83,7 @@ which produces the output:
 To list the installed templates run:
 
 	> gdt.sh list
-	
+
 	       simplejava: (/home/sven/.gdt/dt_java/templates/simplejava)
 	directorytemplate: (/home/sven/.gdt/dt_java/templates/directorytemplate)
 	           gradle: (/home/sven/.gdt/dt_java/templates/gradle)
@@ -95,4 +95,12 @@ On the commandline invoke
 * gdt.sh selfupdate
 
 This will update the folder .gdt/bin in you home directory.
+
+## Contribution
+
+I would be glad about any improvement suggestions and pull requests
+
+The trello board for this project can be found [here](https://trello.com/board/directory-template/5157fb9a6207889232002217#)
+
+
 
