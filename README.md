@@ -27,13 +27,17 @@ This will create a folder .gdt/bin in you home directory with the following stru
 
 Please add .gdt/bin to your PATH environment variable.
 
+Then add the standard templates:
+
+	gdt.sh install -github svene dt_java
+
 
 ##Usage
 Example:
 
 * mkdir hello
 * cd hello
-* gdt.sh apply simplejava       // hit enter when asked for the packagename
+* gdt.sh simplejava       // hit enter when asked for the packagename
 
 Now you have a new directory structure which looks as follows:
 
@@ -58,7 +62,7 @@ same information
 
 If you are working with the gradle build tool you can now apply the gradle template:
 
-* gdt.sh apply gradle
+* gdt.sh gradle
 
 Note that when the gradle template asks you for the package name it proposes the value you entered before so that
 you just can hit enter.
@@ -76,6 +80,14 @@ which produces the output:
 	:run
 	hello world
 
+To list the installed templates run:
+
+	> gdt.sh list
+	
+	       simplejava: (/home/sven/.gdt/dt_java/templates/simplejava)
+	directorytemplate: (/home/sven/.gdt/dt_java/templates/directorytemplate)
+	           gradle: (/home/sven/.gdt/dt_java/templates/gradle)
+	      simpleswing: (/home/sven/.gdt/dt_java/templates/simpleswing)
 
 ##Update gdt
 On the commandline invoke

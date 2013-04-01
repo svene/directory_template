@@ -94,13 +94,13 @@ class GdtMain {
 				}
 			}
 		}
-		else if (command == 'apply') {
-			if (args.size() < 2) {
+		else { // assume command is 'apply'
+			if (args.size() != 1) {
 				printUsage()
 				System.exit(1)
 			}
 			// todo: dynamically read in installed directory templates. Until then hard coded here:
-			String templateName = args[1]
+			String templateName = args[0]
 			File templateSourceDirectory = availableTemplates()[templateName]
 			if (!templateSourceDirectory.exists()) {
 				println("template folder '${templateSourceDirectory.absolutePath}' not found.")
@@ -142,9 +142,6 @@ class GdtMain {
 				fileExclusionFilter: fileExclusionFilter,
 			).createTargetFolder(fileNameBinding, textBinding)
 		}
-		else {
-			println "unknown command '${command}'"
-		}
 	}
 
 	/**
@@ -172,12 +169,12 @@ class GdtMain {
 	  groovy start.groovy install -github <user> <repo>>
 	  groovy start.groovy install -folder <path to>/<template component>
 	  groovy start.groovy list
-	  groovy start.groovy apply <directorytemplate>
+	  groovy start.groovy <directorytemplate>
 
 	examples:
 	  groovy start.groovy install -github svene dt_java
 	  groovy start.groovy install -folder ~/template_components/dt_java
-	  groovy start.groovy apply simplejava
+	  groovy start.groovy simplejava
 	"""
 	}
 }
