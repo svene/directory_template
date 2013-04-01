@@ -1,13 +1,10 @@
 package org.svenehrke.directorytemplate
 
-import groovy.util.logging.Log
-
-import java.util.zip.ZipInputStream
-
+import groovy.util.logging.Slf4j
 /**
  * Capable to create a folder from a template folder
  */
-@Log
+@Slf4j
 class TemplateFolderToFolderCreator {
 
 	String gdtHome
@@ -22,15 +19,10 @@ class TemplateFolderToFolderCreator {
 		new DTMetaInfoFolder(metaInformation: mi).createMetaInfoFolder()
 
 
-		String zipFileName = "${mi.metaInfoFolderName}/${templateName}.zip"
-
-		// zip template directory (just to be able to reuse 'TemplateUnpacker''s filename binding capabilities):
 		String templateSourceDirectoryName = "$gdtHome/$componentName/templates/$templateName"
-		new AntBuilder().zip(basedir: "$templateSourceDirectoryName/..", destfile: zipFileName, includes: "${templateName}/**")
-		def zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFileName)))
 
 		// unzip again with bindings applied:
-		new TemplateUnpacker(targetFolderName: mi.metaInfoFolderName, filenameBinding: inFilenameBinding).createFolderFromZipInputStream(zipInputStream)
+		new TemplateUnpacker(targetFolderName: mi.templateFolderInMetaFolder(), filenameBinding: inFilenameBinding).createFolderFrom(templateSourceDirectoryName)
 
 		// Apply textBinding on extracted files:
 		String templatedirectory = "${mi.templateFolderInMetaFolder()}/templatedirectory"
@@ -43,6 +35,5 @@ class TemplateFolderToFolderCreator {
 
 		// cleanup:
 		new File(mi.templateFolderInMetaFolder()).deleteDir()
-		new File(zipFileName).delete()
 	}
 }

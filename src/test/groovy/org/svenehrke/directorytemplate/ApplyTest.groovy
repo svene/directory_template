@@ -8,9 +8,6 @@ public class ApplyTest extends Specification {
 			String userHome = System.properties['user.home']
 			String gdtHome = "${userHome}/.gdt"
 
-			String dtComponent = 'dt_java'
-			String dtTemplate = 'simplejava'
-
 		when:
 			def fileNameBinding = ['@packagename@': DTUtil.dotsToSlashes('org.svenehrke')]
 			def textBinding = ['packagename': 'org.svenehrke']

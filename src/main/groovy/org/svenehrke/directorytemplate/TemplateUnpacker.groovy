@@ -1,40 +1,34 @@
 package org.svenehrke.directorytemplate
+import groovy.io.FileType
+import groovy.util.logging.Slf4j
+import org.apache.commons.io.FileUtils
 
-import groovy.util.logging.Log
-
-import java.util.zip.ZipEntry
-import java.util.zip.ZipInputStream
-
-@Log
+@Slf4j
 class TemplateUnpacker {
 	String targetFolderName
 	Map<String, String> filenameBinding
 
-	void createFolderFromZipInputStream(ZipInputStream inZipInputStream) {
+	void createFolderFrom(String inTemplateSourceDirectoryName) {
 
 		def bindingResolver = new BindingResolver(filenameBinding)
-		ZipEntry ze
-		while ((ze = inZipInputStream.getNextEntry()) != null) {
 
-			def newName = bindingResolver.apply(ze.name)
+		// Create new folders with new names:
+		new File(inTemplateSourceDirectoryName).eachDirRecurse {dir ->
+			String path = dir.absolutePath - (inTemplateSourceDirectoryName + '/')
+
+			def newName = bindingResolver.apply(path)
 			String fn = "$targetFolderName/$newName"
-			if (ze.directory) {
-				log.info "folder: $ze.name, new: $fn"
-				new File(fn).mkdirs()
-			}
-			else {
-				// see http://snipplr.com/view/1745/extract-zipentry-into-a-bytearrayoutputstream/
-				log.info "unzipping file $fn"
-				OutputStream output = new File(fn).newDataOutputStream()
-				int data = 0;
-				while( ( data = inZipInputStream.read() ) != -1 )
-				{
-					output.write( data );
-				}
-				// The ZipEntry is extracted in the output
-				output.close();
-			}
+			new File(fn).mkdirs()
 		}
-		inZipInputStream.close()
+
+		// Create files with new names:
+		new File(inTemplateSourceDirectoryName).eachFileRecurse FileType.FILES, {file ->
+			String path = file.absolutePath - (inTemplateSourceDirectoryName + '/')
+
+			def newName = bindingResolver.apply(path)
+			String fn = "$targetFolderName/$newName"
+
+			FileUtils.copyFile(file, new File(fn))
+		}
 	}
 }
