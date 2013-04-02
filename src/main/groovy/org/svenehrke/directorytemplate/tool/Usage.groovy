@@ -5,15 +5,26 @@ class Usage {
 	def show() {
 		println """
 	usage:
-	  groovy start.groovy install -github <user> <repo>>
-	  groovy start.groovy install -folder <path to>/<template component>
-	  groovy start.groovy list
-	  groovy start.groovy <directorytemplate>
 
-	examples:
-	  groovy start.groovy install -github svene dt_java
-	  groovy start.groovy install -folder ~/template_components/dt_java
-	  groovy start.groovy simplejava
+	  install template component from github repository:
+	    gdt.sh install -github <user> <repo>>
+	    example: gdt.sh install -github svene dt_java
+
+	  install template component from local folder:
+	    gdt.sh install -folder <path to>/<template component>
+	    example: gdt.sh install -folder ~/template_components/dt_java
+
+	  list installed templates:
+	    gdt.sh list
+
+	  apply a template:
+	    gdt.sh <directorytemplate>
+	    example: gdt.sh simplejava
+
+	  update a template:
+	    gdt.sh update <template component>
+	    example: gdt.sh update dt_java
+
 	"""
 	}
 }
