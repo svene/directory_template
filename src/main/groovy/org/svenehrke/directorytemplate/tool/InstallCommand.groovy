@@ -79,5 +79,6 @@ class InstallCommand {
 			throw IllegalStateException("unknown installmode: $installMode")
 		}
 
+		true
 	}
 }
