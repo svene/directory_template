@@ -15,7 +15,7 @@ public class ApplyTest extends Specification {
 			new TemplateFolderToFolderCreator(
 				gdtHome: gdtHome,
 				targetDir: "$userHome/tmp/gdt",
-				templateName: 'simplejava',
+				templateName: 'java',
 				componentName: 'dt_java',
 			).createTargetFolder(fileNameBinding, textBinding)
 
