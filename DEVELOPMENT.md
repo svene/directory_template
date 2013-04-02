@@ -31,6 +31,21 @@ will show the installed template component:
 * groovy <path to>/directory_template/start.groovy apply simplejava
   will expand the 'simplejava' template into the current folder
 
+###Relese cycle
+* make sure version number got increased in build.gradle (compared to previous release)
+* do a local installation: ./gradlew install
+* remove snapshot grapes: in $HOME/.groovy/grapes/org.svenehrke do a rm -rf directory_template
+* in an empty folder try out gdt functionality using a gdtdev.sh and a gdtdev.groovy file which uses a -SNAPSHOT grape
+
+after successful local test:
+
+* git tag -a -m "0.0.xx" "0.0.xx"
+* git push
+* git push --tags
+* ./gradlew makeRelease
+* in svene.github.com: commit and push new version to svene's mavenrepo on github
+* in gdt_bin: set version to "0.0.xx" in gdt.groovy, commit and push
+
 ###Other notes
 *find file extensions in folder (http://lookherefirst.wordpress.com/2008/10/01/how-to-list-all-file-extensions-within-a-directory/)):
 find build -type f| sed -e "s/.*\./\./"|sort|uniq -c|grep -e '\..*'|sort -rn
