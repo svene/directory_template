@@ -14,13 +14,16 @@ class GdtMain {
 		def cmd = null
 
 		if (command == 'install') {
-			cmd = new InstallCommand(args: args, gdtHome: gdtHome, usage: new Usage())
+			cmd = new InstallCommand(args: args, gdtHome: gdtHome)
 		}
 		else if (command == 'list') {
 			cmd = new ListCommand(gdtHome: gdtHome)
 		}
+		else if (command == 'update') {
+			cmd = new UpdateCommand(gdtHome: gdtHome, args: args)
+		}
 		else { // assume command is 'apply'
-			cmd = new ApplyCommand(gdtHome: gdtHome, args: args, usage: new Usage())
+			cmd = new ApplyCommand(gdtHome: gdtHome, args: args)
 		}
 
 		if (cmd) {

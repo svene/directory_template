@@ -10,7 +10,6 @@ class InstallCommand {
 
 	String gdtHome
 	String[] args
-	Usage usage
 
 	boolean run() {
 		String ghUserName = 'svene'
@@ -23,13 +22,13 @@ class InstallCommand {
 
 		InstallMode installMode = gitHubMode ? InstallMode.GITHUB : folderMode ? InstallMode.FOLDER : InstallMode.UNKNOWN
 		if (installMode.is(InstallMode.UNKNOWN)) {
-			usage.show()
+			new Usage().show()
 			return false
 		}
 
 		if (installMode.is(InstallMode.GITHUB)) {
 			if (args.size() < 4) {
-				usage.show()
+				new Usage().show()
 				return false
 			}
 			ghUserName = args[2]
@@ -50,7 +49,7 @@ class InstallCommand {
 		}
 		else if (installMode.is(InstallMode.FOLDER)) {
 			if (args.size() != 3) {
-				usage.show()
+				new Usage().show()
 				return false
 			}
 			String sourceFolderName = args[2]

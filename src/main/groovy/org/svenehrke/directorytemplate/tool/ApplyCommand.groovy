@@ -10,18 +10,17 @@ class ApplyCommand {
 
 	String gdtHome
 	String[] args
-	Usage usage
 
 	boolean run() {
 		if (args.size() != 1) {
 			new Usage().show()
-			System.exit(1)
+			return false
 		}
 		String templateName = args[0]
 		File templateSourceDirectory = new GdtInfo(gdtHome: gdtHome).availableTemplates()[templateName]
 		if (!templateSourceDirectory.exists()) {
 			println("template folder '${templateSourceDirectory.absolutePath}' not found.")
-			System.exit(1)
+			return false
 		}
 		String componentName = templateSourceDirectory.parentFile.parentFile.getName()
 
