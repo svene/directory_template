@@ -13,9 +13,9 @@ class GdtInfo {
 	 */
 	Map<String, File> availableTemplates() {
 		def result = [:]
-		new File(gdtHome).eachDir { f ->
-			if (!(['bin']).contains(f.name)) {
-				new File("${gdtHome}/${f.name}/templates").eachDir { dt ->
+		new File(gdtHome).eachDir { component ->
+			if (!(['bin']).contains(component.name)) {
+				new File("${gdtHome}/${component.name}/templates").eachDir { dt ->
 					result[dt.name] = dt
 				}
 			}

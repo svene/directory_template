@@ -17,9 +17,10 @@ class ApplyCommand {
 			return false
 		}
 		String templateName = args[0]
-		File templateSourceDirectory = new GdtInfo(gdtHome: gdtHome).availableTemplates()[templateName]
-		if (!templateSourceDirectory.exists()) {
-			println("template folder '${templateSourceDirectory.absolutePath}' not found.")
+		Map<String, File> at = new GdtInfo(gdtHome: gdtHome).availableTemplates()
+		File templateSourceDirectory = at[templateName]
+		if (!templateSourceDirectory?.exists()) {
+			println("template '${templateName}' not found.")
 			return false
 		}
 		String componentName = templateSourceDirectory.parentFile.parentFile.getName()
