@@ -1,10 +1,5 @@
 package org.svenehrke.directorytemplate.tool
 
-import org.apache.commons.io.FileUtils
-import org.eclipse.jgit.api.CloneCommand
-import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.lib.Repository
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.svenehrke.directorytemplate.*
 
 class GdtMain {
@@ -20,65 +15,13 @@ class GdtMain {
 		def command = args[0]
 
 		if (command == 'install') {
-
-			def gitHubMode = args[1] == '-github'
-			def folderMode = args[1] == '-folder'
-
-			String ghUserName = 'svene'
-			String ghRepoName = 'dt_java'
-			String remoteUrl
-			String localRepoLocation
-			if (gitHubMode) {
-				if (args.size() < 4) {
-					printUsage()
-					System.exit(1)
-				}
-				ghUserName = args[2]
-				ghRepoName = args[3]
-				remoteUrl = "https://github.com/${ghUserName}/${ghRepoName}.git"
-				localRepoLocation = "${gdtHome}/${ghRepoName}"
-
-				FileRepositoryBuilder builder = new FileRepositoryBuilder();
-				Repository repository = builder.setWorkTree(new File(gdtHome)).build()
-				Git git = new Git(repository);
-				CloneCommand clone = git.cloneRepository();
-				clone.setBare(false);
-				clone.setCloneAllBranches(true);
-				clone.setDirectory(new File(localRepoLocation)).setURI(remoteUrl);
-				clone.call();
-
-				println "Repository '${remoteUrl}' cloned into local folder '${localRepoLocation}'"
-			}
-			else if (folderMode) {
-				if (args.size() != 3) {
-					printUsage()
-					System.exit(1)
-				}
-				String sourceFolderName = args[2]
-				File sourceFolder = new File(sourceFolderName)
-				if (!sourceFolder.exists()) {
-					println "Folder '$sourceFolderName' not found"
-					System.exit(1)
-				}
-				if (!new File("$sourceFolderName/templates").exists()) {
-					println "Source folder '$sourceFolderName' is not a valid template component (does not contain a subfolder named 'templates')"
-					System.exit(1)
-				}
-				String componentName = sourceFolder.getName()
-
-				String targetFolderName = "$gdtHome/$componentName"
-				File targetFolder = new File(targetFolderName)
-				if (targetFolder.exists()) {
-					println "Target folder '$targetFolderName' already exists. Please remove it first."
-					System.exit(1)
-				}
-
-				FileUtils.copyDirectory(sourceFolder, targetFolder)
-				println "template component '$componentName' successfully installed"
-			}
-			else {
-				printUsage()
-				System.exit(0)
+			boolean success = new InstallCommand(
+				args: args,
+				gdtHome: gdtHome,
+				usage: new Usage(),
+			).run()
+			if (!success) {
+				System.exit(1)
 			}
 
 		}
@@ -164,17 +107,6 @@ class GdtMain {
 	}
 
 	def printUsage() {
-		println """
-	usage:
-	  groovy start.groovy install -github <user> <repo>>
-	  groovy start.groovy install -folder <path to>/<template component>
-	  groovy start.groovy list
-	  groovy start.groovy <directorytemplate>
-
-	examples:
-	  groovy start.groovy install -github svene dt_java
-	  groovy start.groovy install -folder ~/template_components/dt_java
-	  groovy start.groovy simplejava
-	"""
+		new Usage().show()
 	}
 }
