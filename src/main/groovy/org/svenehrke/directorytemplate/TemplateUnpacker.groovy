@@ -10,11 +10,14 @@ class TemplateUnpacker {
 
 	void createFolderFrom(String inTemplateSourceDirectoryName) {
 
+		// Conversion to support windows backslash (since 'templateSourceDirectoryName' is used in '-' operation further down)
+		def templateSourceDirectoryName = new File(inTemplateSourceDirectoryName).absolutePath
+
 		def bindingResolver = new BindingResolver(filenameBinding)
 
 		// Create new folders with new names:
-		new File(inTemplateSourceDirectoryName).eachDirRecurse {dir ->
-			String path = dir.absolutePath - (inTemplateSourceDirectoryName + '/')
+		new File(templateSourceDirectoryName).eachDirRecurse {dir ->
+			String path = dir.absolutePath - (templateSourceDirectoryName + File.separator)
 
 			def newName = bindingResolver.apply(path)
 			String fn = "$targetFolderName/$newName"
@@ -22,11 +25,11 @@ class TemplateUnpacker {
 		}
 
 		// Create files with new names:
-		new File(inTemplateSourceDirectoryName).eachFileRecurse FileType.FILES, {file ->
-			String path = file.absolutePath - (inTemplateSourceDirectoryName + '/')
+		new File(templateSourceDirectoryName).eachFileRecurse FileType.FILES, {file ->
+			String path = file.absolutePath - (templateSourceDirectoryName + File.separator)
 
 			def newName = bindingResolver.apply(path)
-			String fn = "$targetFolderName/$newName"
+			String fn = "$targetFolderName" + File.separator + "$newName"
 
 			FileUtils.copyFile(file, new File(fn))
 		}
