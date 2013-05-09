@@ -21,7 +21,7 @@ class TemplateFolderToFolderCreator {
 
 		String templateSourceDirectoryName = "$gdtHome/$componentName/templates/$templateName"
 
-		// unzip again with bindings applied:
+		// Unpack template with bindings applied:
 		new TemplateUnpacker(targetFolderName: mi.templateFolderInMetaFolder(), filenameBinding: inFilenameBinding).createFolderFrom(templateSourceDirectoryName)
 
 		// Apply textBinding on extracted files:
