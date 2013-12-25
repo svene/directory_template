@@ -5,6 +5,12 @@ class GdtMain {
 	String gdtHome = "${userHome}/.gdt"
 
 	def run(String[] args) {
+		try {
+			getClass().forName('java.util.Objects');
+		} catch (ex) {
+			println "You need at least Java 7 to run gdt"
+			System.exit(1)
+		}
 		if (args.size() < 1) {
 			new Usage().show()
 			System.exit(1)

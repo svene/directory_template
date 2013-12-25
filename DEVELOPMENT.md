@@ -1,5 +1,6 @@
 #Development Notes
 
+Note: this description is for Unix based systems. It might work on Windows with cygwin but I never tried.
 
 ##Develpment lifecycle (first time)
 
@@ -8,7 +9,20 @@
 latest published version
 * after having done some development work in 'directory_template' invoke './gradlew install'. This will install
 a snapshot jar into your local maven repository (typically located in $HOME/.m2)
-* add local .m2 to grab resolvers: see: http://groovy.codehaus.org/Grape#Grape-CustomizeIvysettings
+* add local .m2 to grab resolvers in '~/.groovy/grapeConfig.xml': see: http://groovy.codehaus.org/Grape#Grape-CustomizeIvysettings
+
+###Development
+I have a 'bin' folder in my HOME directory to which my PATH environment variable points to. In that 'bin' folder I have the following
+files:
+
+####gdtdev.sh
+groovy `dirname $0`/gdt-dev.groovy $*
+
+####gdt-dev.groovy
+//@GrabResolver(name='sven-local', root='file://localhost/home/sven/se/sweng/_github/svene/svene.github.com/maven2/releases')
+@Grab(group='org.svenehrke', module='directory_template', version='0.0.14-SNAPSHOT')
+import org.svenehrke.directorytemplate.tool.GdtMain
+
 
 ###Template Development
 If you have installed a new snapshot version of 'directory_template' into your local maven respository

@@ -9,26 +9,15 @@
 
 apply plugin: 'java'
 apply plugin: 'groovy'
-apply plugin: 'idea'
 apply plugin: 'maven'
 
 group = 'org.svenehrke'
 archivesBaseName = 'directory_template'
-version = '0.0.15'
-
-idea {
-	project {
-		jdkName = '1.6'
-	}
-	module {
-		downloadSources = false
-		downloadJavadoc = false
-	}
-}
+version = '0.0.16'
 
 repositories {
 	mavenCentral()
-	mavenRepo (url: 'http://m2repo.spockframework.org/snapshots')
+	mavenLocal()
 	}
 
 dependencies {
@@ -36,10 +25,10 @@ dependencies {
 	compile 'ch.qos.logback:logback-core:1.0.10'
 	compile 'commons-io:commons-io:2.4'
 	compile 'org.eclipse.jgit:org.eclipse.jgit:2.3.1.201302201838-r'
+	compile 'org.codehaus.groovy:groovy-all:2.2.1'
 
-	testCompile "org.spockframework:spock-core:0.7-groovy-1.8"
+	testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
 	testCompile 'junit:junit:4.10'
-	groovy 'org.codehaus.groovy:groovy-all:1.8.9'
 }
 
 
@@ -60,8 +49,4 @@ gradle.taskGraph.whenReady { tg ->
 task makeSnapshot(dependsOn: 'uploadArchives')
 
 task makeRelease(dependsOn: 'uploadArchives')
-
-task wrapper(type: Wrapper) {
-	gradleVersion = '1.5'
-}
 
