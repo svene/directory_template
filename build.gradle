@@ -1,15 +1,28 @@
-//buildscript {
-//	apply from: 'gradle/Bintray.gradle' // see https://bitbucket.org/davidmc24/gradle-bintray-plugin
-//}
-
-/*
- * create snapshot: gradle makeSnapshot
- * create release: gradle makeRelease
+/**
+ * Create releases into local .m2 repo:
+ * - create snapshot: gradle makeLocalSnapshot
+ * - create release: gradle makeLocalRelease
+ *
+ * Upload snapshot to bintray: https://bintray.com/svene/mavenrepo/directory_template
+ * - create snapshot: gradle makeBintraySnapshot // do not use, since it does not append '-SNAPSHOT' to folders/files yet
+ * - create release: gradle makeBintrayRelease
  */
 
 apply plugin: 'java'
 apply plugin: 'groovy'
-apply plugin: 'maven'
+apply plugin: 'maven' // for proper local .m2 snapshot installations (which I did not get to work with maven-publish)
+apply plugin: 'maven-publish'
+apply plugin: 'bintray'
+
+buildscript {
+	repositories {
+		mavenLocal()
+		jcenter()
+	}
+	dependencies {
+		classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3"
+	}
+}
 
 group = 'org.svenehrke'
 archivesBaseName = 'directory_template'
@@ -17,8 +30,9 @@ version = '0.0.17'
 
 repositories {
 	mavenCentral()
+	jcenter()
 	mavenLocal()
-	}
+}
 
 dependencies {
 	compile 'ch.qos.logback:logback-classic:1.0.10'
@@ -31,22 +45,62 @@ dependencies {
 	testCompile 'junit:junit:4.10'
 }
 
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = 'javadoc'
+	from 'build/docs/javadoc'
+}
+task sourcesJar(type: Jar, dependsOn: classes) {
+	from sourceSets.main.allSource
+	classifier = 'sources'
+}
+artifacts {
+	archives sourcesJar
+	archives javadocJar
+}
 
-uploadArchives {
-	repositories.mavenDeployer {
-		repository(url: "${userDeploymentRepoBaseURL}/releases")
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+			artifact sourcesJar
+			artifact javadocJar
+		}
 	}
+}
+bintray {
+	user = bintrayUser
+	key = bintrayKey
+	publications = ['mavenJava']
+	pkg {
+		userOrg = 'svene'
+		repo = 'mavenrepo'
+		name = 'directory_template'
+		licenses = ['Apache-2.0']
+	}
+	dryRun = false
+}
+
+//task installSnapshot(dependsOn: 'publishMavenJavaPublicationToMavenLocal') << { // did not get this to produce '*-SNAPSHOT' folders/files in .m2
+
+task makeLocalSnapshot(dependsOn: 'install') << {
+	logger.info "Installing snapshot $project.name"
+}
+
+task makeLocalRelease(dependsOn: 'install') << {
+	logger.info "Installing release $project.name"
 }
 
 // see http://evgeny-goldin.com/wiki/Gradle  (section 'Setting the repository URL at the time the DAG is ready')
 gradle.taskGraph.whenReady { tg ->
-	if (!tg.hasTask(':makeRelease')) {
+	println "ready"
+	if (!tg.hasTask(':makeRelease') && !tg.hasTask(':installRelease')) {
 		version += '-SNAPSHOT'
-		uploadArchives.repositories['mavenDeployer'].repository.url = "${userDeploymentRepoBaseURL}/snapshots"
 	}
+
+	println "version: $version"
 }
 
-task makeSnapshot(dependsOn: 'uploadArchives')
+task makeBintraySnapshot(dependsOn: 'bintrayUpload')
 
-task makeRelease(dependsOn: 'uploadArchives')
+task makeBintrayRelease(dependsOn: 'bintrayUpload')
 
