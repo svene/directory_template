@@ -23,6 +23,9 @@ groovy `dirname $0`/gdt-dev.groovy $*
 @Grab(group='org.svenehrke', module='directory_template', version='0.0.14-SNAPSHOT')
 import org.svenehrke.directorytemplate.tool.GdtMain
 
+###Verification
+remove folder ~/.gdt/dt_java
+call: gdtdev.sh -github install svene dt_java
 
 ###Template Development
 If you have installed a new snapshot version of 'directory_template' into your local maven respository
