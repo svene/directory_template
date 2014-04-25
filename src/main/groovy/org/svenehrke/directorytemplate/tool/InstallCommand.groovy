@@ -64,14 +64,19 @@ class InstallCommand {
 			}
 			String componentName = sourceFolder.getName()
 
-			String targetFolderName = "$gdtHome/$componentName"
+			String targetFolderName = "$gdtHome/${componentName}DEV"
 			File targetFolder = new File(targetFolderName)
 			if (targetFolder.exists()) {
 				println "Target folder '$targetFolderName' already exists. Please remove it first."
 				return false
 			}
 
-			FileUtils.copyDirectory(sourceFolder, targetFolder)
+			FileUtils.copyDirectory(sourceFolder, targetFolder, new FileFilter() {
+				@Override
+				boolean accept(final File pathname) {
+					return !pathname.name.startsWith('.git')
+				}
+			})
 			println "template component '$componentName' successfully installed"
 		}
 		else {
